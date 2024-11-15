@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Chi Tiết Bác Sĩ</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">Chi Tiết Bác Sĩ</h2>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${doctor.name}">Tên Bác Sĩ</h5>
+                <p class="card-text"><strong>Chuyên Môn:</strong> <span th:text="${doctor.specialization}">Chuyên Môn</span></p>
+                <p class="card-text"><strong>Số Điện Thoại:</strong> <span th:text="${doctor.phone}">Số Điện Thoại</span></p>
+                <p class="card-text"><strong>Email:</strong> <span th:text="${doctor.email}">Email</span></p>
+            </div>
+        </div>
+
+        <a href="/doctors" class="btn btn-secondary mt-4">Quay lại danh sách bác sĩ</a>
+    </div>
+</section>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chi Tiết Sản Phẩm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .product-details-container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .product-image-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .product-info-section {
+            flex: 1;
+            padding-left: 20px;
+        }
+        .product-avatar {
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 10px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .product-avatar:hover {
+            transform: scale(1.05);
+        }
+        .product-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .product-gallery img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .product-gallery img:hover {
+            transform: scale(1.1);
+        }
+        .product-info {
+            margin-top: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .product-info p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .product-info p strong {
+            color: #000;
+        }
+        .btn-add-cart {
+            background-color: #007bff;
+            color: white;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+        }
+        .btn-add-cart:hover {
+            background-color: #0056b3;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="product-details-container">
+        <div class="product-image-section">
+            <div><img th:src="@{'/' + ${product.imgUrl}}" alt="Front Image" width="250" height="250"></div>
+            <div class="product-gallery">
+                <th:block th:each="image : ${product.productImages}">
+                    <img th:src="@{'/' + ${image}}" alt="Ảnh Sản Phẩm">
+                </th:block>
+            </div>
+        </div>
+        <div class="product-info-section">
+            <div class="product-info">
+                <h1 th:text="${product.name}">Tên Sản Phẩm</h1>
+                <p><strong>ID:</strong> <span th:text="${product.id}">ID Sản Phẩm</span></p>
+                <p><strong>Danh Mục:</strong> <span th:text="${product.category.name}">Tên Danh Mục</span></p>
+                <p><strong>Mô Tả:</strong> <span th:text="${product.description}">Mô Tả Sản Phẩm</span></p>
+                <p><strong>Giá:</strong> <span th:text="${product.price}">Giá Sản Phẩm</span> VND</p>
+                <p><strong>Số lượng:</strong>
+                    <span th:if="${product.inventory > 0}" th:text="${product.inventory}">Số lượng</span>
+                    <span th:if="${product.inventory == 0}">Hết hàng</span>
+                </p>
+                <div th:if="${product.inventory > 0}">
+                    <form th:action="@{/cart/add}" method="post">
+                        <input type="number" name="quantity" min="1" th:max="${product.inventory}" value="1" class="form-control d-inline-block" style="width: 70px; margin-right: 10px;">
+                        <input type="hidden" th:value="${product.id}" name="productId"/>
+                        <button class="btn btn-add-cart btn-sm"><i class="fas fa-cart-plus"></i> Thêm vào Giỏ</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

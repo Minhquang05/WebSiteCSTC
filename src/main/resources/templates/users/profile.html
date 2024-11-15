@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-3">
+    <form th:action="@{/profile/update}" method="post">
+        <div class="form-group mb-4" sec:authorize="isAuthenticated()">
+            <label for="customerName" class="form-label">Username:</label>
+            <input th:value="${user.username}}" type="text" id="customerName" name="customerName" class="form-control" readonly>
+        </div>
+        <div class="form-group mb-4" sec:authorize="isAuthenticated()">
+            <label for="email" class="form-label">Email:</label>
+            <input th:value="${user.email}}" type="text" id="email" name="email" class="form-control" readonly>
+        </div>
+        <div class="form-group mb-4" sec:authorize="isAuthenticated()">
+            <label for="address" class="form-label">Address:</label>
+            <input th:value="${user.address}}" type="text" id="address" name="address" class="form-control" readonly>
+        </div>
+        <div class="form-group mb-4" sec:authorize="isAuthenticated()">
+            <label for="phone" class="form-label">Phone number:</label>
+            <input th:value="${user.phone}}" type="text" id="phone" name="phone" class="form-control" readonly>
+        </div>
+    </form>
+</section>
+</body>
+</html>

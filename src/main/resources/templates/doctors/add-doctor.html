@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Thêm Bác Sĩ</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">Thêm Bác Sĩ Mới</h2>
+        <form action="#" th:action="@{/doctors/add}" th:object="${doctor}" method="post" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="name">Tên</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Nhập tên bác sĩ" required>
+                <div class="invalid-feedback">Vui lòng nhập tên.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="specialization">Chuyên Môn</label>
+                <input type="text" id="specialization" th:field="*{specialization}" class="form-control" placeholder="Nhập chuyên môn" required>
+                <div class="invalid-feedback">Vui lòng nhập chuyên môn.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Số Điện Thoại</label>
+                <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="Nhập số điện thoại" required>
+                <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
+                <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Lưu Bác Sĩ</button>
+            <a href="/doctors" class="btn btn-secondary">Quay Lại</a>
+        </form>
+    </div>
+</section>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    // Custom Bootstrap validation for form
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            var forms = document.getElementsByClassName('needs-validation');
+            Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
+</html>

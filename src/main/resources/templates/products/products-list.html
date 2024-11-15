@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title th:text="${title} ?: 'Product'">Product</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<section layout:fragment="content">
+    <h1>Products List</h1>
+    <div>
+        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/products/add}" class="btn btn-primary mb-3">
+            Add New Product
+        </a>
+        <form action="/products" method="get" class="dropdown">
+            <input type="text" id="searchInput" name="keyword" placeholder="Tìm Sản phẩm" style="width:400px"
+                   onkeyup="searchProduct(${products}})"/>
+            <input type="submit" value="Search" />
+        </form>
+    </div>
+    <div class="mb-4 mt-4">
+        <a th:href="@{/products/sorted/asc}" class="btn btn-secondary">Lọc theo giá tăng dần</a>
+        <a th:href="@{/products/sorted/desc}" class="btn btn-secondary">Lọc theo giá giảm dần</a>
+    </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Category Name</th>
+            <th>Ảnh</th>
+            <th>Số lượng</th>
+            <th sec:authorize="hasAuthority('ADMIN')">Actions</th>
+            <th>Add To Cart</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.description}"></td>
+            <td th:text="${product.category.name}"></td>
+            <td>
+                <div class="product-gallery">
+                        <img th:src="@{'/' + ${product.imgUrl}}" alt="Product Image" width="50" height="50">
+                </div>
+            </td>
+            <td>
+                <span th:if="${product.inventory > 0}" th:text="${product.inventory}"></span>
+                <span th:if="${product.inventory == 0}">Hết hàng</span>
+            </td>
+            <td sec:authorize="hasAuthority('ADMIN')">
+                <div>
+                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Edit</a>
+                    <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure?')">Delete</a>
+                </div>
+            </td>
+            <td>
+                <form th:if="${product.inventory > 0}" th:action="@{/cart/add}" method="post">
+                    <input type="number" name="quantity" min="1" value="1"
+                           class="form-control d-inline-block" style="width: 70px;">
+                    <input type="hidden" th:value="${product.id}"
+                           name="productId"/>
+                    <button type="submit" class="btn btn-warning btn-sm">Thêm Vào Giỏ</button>
+                </form>
+            </td>
+            <td>
+                <a th:href="@{/products/details/{id}(id=${product.id})}" class="btn btn-info btn-sm">Chi tiết</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+</body>
+
+<script th:src="@{../static/js/jquery.min.js}"></script>
+</html>

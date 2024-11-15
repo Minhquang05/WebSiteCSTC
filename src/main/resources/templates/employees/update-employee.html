@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Chỉnh sửa Nhân viên</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">Chỉnh sửa Nhân viên</h2>
+        <div th:if="${user != null}">
+            <form id="employeeForm" th:action="@{/employees/update/{id}(id=${user.id})}" th:object="${user}" method="post">
+                <div th:if="${errors}" class="alert alert-danger d-flex" role="alert">
+                    <ul class="my-auto align-items-center">
+                        <li th:each="error : ${errors}" th:text="${error}" class="text-danger text-start"></li>
+                    </ul>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="username">Tên đăng nhập:</label>
+                    <input type="text" th:field="*{username}" class="form-control" id="username" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="email">Email:</label>
+                    <input type="email" th:field="*{email}" class="form-control" id="email" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="phone">Số điện thoại:</label>
+                    <input type="tel" th:field="*{phone}" class="form-control" id="phone" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="password">Mật khẩu mới </label>
+                    <input type="password" th:field="*{password}" class="form-control" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

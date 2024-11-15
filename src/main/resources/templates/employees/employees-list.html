@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>Employee Management</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">Employee List</h2>
+        <a href="/employees/create" class="btn btn-primary mb-4">Add New Employee</a>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${listEmployees}">
+                <td th:text="${employee.id}"></td>
+                <td th:text="${employee.username}"></td>
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.phone}"></td>
+                <td>
+                    <a  th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Edit</a>
+                    <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</section>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>
