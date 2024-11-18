@@ -10,9 +10,8 @@
 </head>
 <body>
 <section layout:fragment="content" class="container mt-3">
-    <h1>Your Cart</h1>
-    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Your cart is
-        empty.</div>
+    <h1>GIỎ HÀNG CỦA BẠN</h1>
+    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Giỏ hàng của bạn trống</div>
     <table class="table" th:unless="${cartItems.isEmpty()}">
         <thead class="table-light">
         <tr>
@@ -35,10 +34,10 @@
     </table>
     <div class="mt-3">
         <p>Tổng giá trị: <span th:text="${totalPrice}"></span></p>
-        <a th:href="@{/cart/clear}" class="btn btn-secondary">Clear Cart</a>
+        <a th:href="@{/cart/clear}" class="btn btn-secondary">Dọn giỏ hàng</a>
         |
-        <a sec:authorize="!isAuthenticated()" th:href="@{/order/checkout}" class="btn btn-primary">Check Out</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/order/checkout/{name}(name=${username})}"  class="btn btn-primary">Check Out</a>
+        <a sec:authorize="!isAuthenticated()" th:href="@{/order/checkout}" class="btn btn-primary">Xuất hóa đơn</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/order/checkout/{name}(name=${username})}"  class="btn btn-primary">Xuất hóa đơn</a>
     </div>
 </section>
 </body>

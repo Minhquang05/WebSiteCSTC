@@ -12,10 +12,10 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>Products List</h1>
+    <h1>DANH SÁCH SẢN PHẨM</h1>
     <div>
         <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/products/add}" class="btn btn-primary mb-3">
-            Add New Product
+            Thêm sản phẩm mới
         </a>
         <form action="/products" method="get" class="dropdown">
             <input type="text" id="searchInput" name="keyword" placeholder="Tìm Sản phẩm" style="width:400px"
@@ -30,25 +30,25 @@
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Category Name</th>
-            <th>Ảnh</th>
-            <th>Số lượng</th>
+            <th>MÃ SẢN PHẨM</th>
+            <th>TÊN SẢN PHẨM</th>
+            <th>GIÁ TIỀN</th>
+            <th>MÔ TẢ SẢN PHẨM</th>
+            <th>TÊN DANH MỤC</th>
+            <th>ẢNH</th>
+            <th>SỐ LƯỢNG</th>
             <th sec:authorize="hasAuthority('ADMIN')">Actions</th>
-            <th>Add To Cart</th>
-            <th>Details</th>
+            <th>THÊM VÀO GIỎ HÀNG</th>
+            <th>CHI TIẾT SẢN PHẨM</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="product : ${products}">
-            <td th:text="${product.id}"></td>
-            <td th:text="${product.name}"></td>
-            <td th:text="${product.price}"></td>
-            <td th:text="${product.description}"></td>
-            <td th:text="${product.category.name}"></td>
+            <td style="font-size: 0.9em;" th:text="${product.id}"></td>
+            <td style="font-size: 0.9em;" th:text="${product.name}"></td>
+            <td style="font-size: 0.9em;" th:text="${product.price}"></td>
+            <td style="font-size: 0.9em;" th:text="${product.description}"></td>
+            <td style="font-size: 0.9em;" th:text="${product.category.name}"></td>
             <td>
                 <div class="product-gallery">
                         <img th:src="@{'/' + ${product.imgUrl}}" alt="Product Image" width="50" height="50">
@@ -60,8 +60,8 @@
             </td>
             <td sec:authorize="hasAuthority('ADMIN')">
                 <div>
-                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Edit</a>
-                    <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm"
+                    <a style="width:60px ; height:30px" th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Edit</a>
+                    <a style="width:60px ; height:30px" th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Are you sure?')">Delete</a>
                 </div>
             </td>
