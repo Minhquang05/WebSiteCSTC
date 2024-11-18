@@ -2,6 +2,8 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 
 @Entity
 public class Doctor {
@@ -12,6 +14,9 @@ public class Doctor {
     private String specialization;
     private String phone;
     private String email;
+    private String avatar;
+    @OneToMany
+    private List<WorkHourDetail>  workHourDetail;
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -28,5 +33,6 @@ public class Doctor {
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
 }
 

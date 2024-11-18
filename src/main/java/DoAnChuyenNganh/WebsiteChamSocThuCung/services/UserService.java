@@ -32,13 +32,23 @@ public class UserService implements UserDetailsService{
     }
 
     public void setDefaultRole(String username) {
-        userRepository.findByUsername(username).ifPresentOrElse(
-                user -> {
-                    user.getRoles().add(roleRepository.findRoleById(Role.USER.value));
-                    userRepository.save(user);
-                },
-                () -> { throw new UsernameNotFoundException("User not found"); }
-        );}
+        if(username.equals("ADMIN"))
+            userRepository.findByUsername(username).ifPresentOrElse(
+                    user -> {
+                        user.getRoles().add(roleRepository.findRoleById(Role.ADMIN.value));
+                        userRepository.save(user);
+                    },
+                    () -> { throw new UsernameNotFoundException("User not found"); }
+            );
+        else
+            userRepository.findByUsername(username).ifPresentOrElse(
+                    user -> {
+                        user.getRoles().add(roleRepository.findRoleById(Role.USER.value));
+                        userRepository.save(user);
+                    },
+                    () -> { throw new UsernameNotFoundException("User not found"); }
+            );
+    }
 
     public void setEmployeeRole(String username) {
         userRepository.findByUsername(username).ifPresentOrElse(
