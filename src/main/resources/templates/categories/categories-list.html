@@ -9,17 +9,16 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>Category List</h1>
+    <h1>DANH MỤC SẢN PHẨM</h1>
     <div>
-        <a th:href="@{/categories/add}" class="btn btn-primary mb-3">Add New
-            Category</a>
+        <a th:href="@{/categories/add}" class="btn btn-primary mb-3">Thêm danh mục mới</a>
     </div>
     <table class="table table-bordered table-hover">
         <thead class="table-dark">
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
+            <th>Mã mục sản phẩm</th>
+            <th>Tên sản phẩm</th>
+            <th>Trạng thái</th>
         </tr>
         </thead>
         <tbody>
@@ -27,8 +26,8 @@
             <td th:text="${category.id}"></td>
             <td th:text="${category.name}"></td>
             <td>
-                <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm">Edit</a>
-                <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
+                <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Xóa</a>
             </td>
         </tr>
         </tbody>

@@ -9,15 +9,15 @@
 </head>
 <body>
 <section layout:fragment="content" class="container mt-5">
-    <h1 class="mb-4">Form Category</h1>
+    <h1 class="mb-4">Biểu Mẫu Danh Mục</h1>
     <form th:action="@{/categories/add}" th:object="${category}" method="post">
         <div class="mb-3">
-            <label for="name" class="form-label">Category Name:</label>
+            <label for="name" class="form-label">Tên danh mục:</label>
             <input type="text" id="name" th:field="*{name}" class="form-control"/>
             <div class="text-danger" th:if="${#fields.hasErrors('name')}"
                  th:errors="*{name}"></div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Xác nhận</button>
     </form>
 </section>
 <script

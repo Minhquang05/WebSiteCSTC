@@ -37,18 +37,18 @@
             <th>TÊN DANH MỤC</th>
             <th>ẢNH</th>
             <th>SỐ LƯỢNG</th>
-            <th sec:authorize="hasAuthority('ADMIN')">Actions</th>
+            <th sec:authorize="hasAuthority('ADMIN')">TRẠNG THÁI</th>
             <th>THÊM VÀO GIỎ HÀNG</th>
             <th>CHI TIẾT SẢN PHẨM</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="product : ${products}">
-            <td style="font-size: 0.9em;" th:text="${product.id}"></td>
-            <td style="font-size: 0.9em;" th:text="${product.name}"></td>
-            <td style="font-size: 0.9em;" th:text="${product.price}"></td>
-            <td style="font-size: 0.9em;" th:text="${product.description}"></td>
-            <td style="font-size: 0.9em;" th:text="${product.category.name}"></td>
+            <td style="font-size: 1em;" th:text="${product.id}"></td>
+            <td style="font-size: 1em;" th:text="${product.name}"></td>
+            <td style="font-size: 1em;" th:text="${product.price}"></td>
+            <td style="font-size: 1em;" th:text="${product.description}"></td>
+            <td style="font-size: 1em;" th:text="${product.category.name}"></td>
             <td>
                 <div class="product-gallery">
                         <img th:src="@{'/' + ${product.imgUrl}}" alt="Product Image" width="50" height="50">
@@ -60,9 +60,8 @@
             </td>
             <td sec:authorize="hasAuthority('ADMIN')">
                 <div>
-                    <a style="width:60px ; height:30px" th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Edit</a>
-                    <a style="width:60px ; height:30px" th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure?')">Delete</a>
+                    <a style="width:100px ; height:30px" th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
+                    <a style="width:100px ; height:30px" th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm"onclick="return confirm('Are you sure?')">Xóa</a>
                 </div>
             </td>
             <td>
@@ -75,7 +74,7 @@
                 </form>
             </td>
             <td>
-                <a th:href="@{/products/details/{id}(id=${product.id})}" class="btn btn-info btn-sm">Chi tiết</a>
+                <a style="width:100px ; height:30px" th:href="@{/products/details/{id}(id=${product.id})}" class="btn btn-info btn-sm">Chi tiết</a>
             </td>
         </tr>
         </tbody>
