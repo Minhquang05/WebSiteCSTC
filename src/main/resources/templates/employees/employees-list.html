@@ -11,16 +11,16 @@
 <body>
 <section layout:fragment="content" class="container mt-5">
     <div class="container">
-        <h2 class="mt-4 mb-4">Employee List</h2>
-        <a href="/employees/create" class="btn btn-primary mb-4">Add New Employee</a>
+        <h2 class="mt-4 mb-4">DANH SÁCH NHÂN VIÊN</h2>
+        <a href="/employees/create" class="btn btn-primary mb-3">Thêm nhân viên mới</a>
         <table class="table table-striped">
-            <thead class="thead-dark">
+            <thead class="table-dark">
             <tr>
-                <th>ID</th>
-                <th>Name</th>
+                <th>Mã nhân viên</th>
+                <th>Tên nhân viên</th>
                 <th>Email</th>
-                <th>Phone</th>
-                <th>Action</th>
+                <th>Số điện thoại</th>
+                <th>Trạng thái</th>
             </tr>
             </thead>
             <tbody>
@@ -30,15 +30,14 @@
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.phone}"></td>
                 <td>
-                    <a  th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Edit</a>
+                    <a  th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
                     <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure?')">Delete</a>
+                       onclick="return confirm('Are you sure?')">Xóa</a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
 
 </section>
 </body>

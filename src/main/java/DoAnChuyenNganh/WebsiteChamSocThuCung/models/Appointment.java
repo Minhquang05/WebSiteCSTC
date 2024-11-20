@@ -18,4 +18,5 @@ public class Appointment {
     @ManyToOne
     private Doctor doctor;  // Liên kết với bác sĩ
     // Getters and setters...
+
 }
