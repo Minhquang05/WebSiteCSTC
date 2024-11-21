@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5 text-center">
+    <h1>Đang Chuyển Hướng...</h1>
+    <p>Chúng tôi đang chuyển bạn đến trang thanh toán của MoMo.</p>
+    <form id="redirectForm" action="{{ momoPaymentUrl }}" method="POST">
+        <input type="hidden" name="partnerCode" value="{{ partnerCode }}">
+        <input type="hidden" name="requestId" value="{{ requestId }}">
+        <input type="hidden" name="amount" value="{{ amount }}">
+        <input type="hidden" name="orderId" value="{{ orderId }}">
+        <input type="hidden" name="orderInfo" value="{{ orderInfo }}">
+        <input type="hidden" name="redirectUrl" value="{{ redirectUrl }}">
+        <input type="hidden" name="ipnUrl" value="{{ ipnUrl }}">
+        <input type="hidden" name="signature" value="{{ signature }}">
+        <button type="submit" class="btn btn-primary">Nếu bạn không được chuyển hướng, nhấp vào đây</button>
+    </form>
+</div>
+<script>
+    document.getElementById('redirectForm').submit();
+</script>
+</body>
+</html>
