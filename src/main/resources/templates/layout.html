@@ -12,7 +12,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-success mt-3"
     style="height:80px">
     <div class="container-fluid">
-        <a class="navbar-brand text-white" href="/"><img class="img-fluid" src="../images/logochamsocthucung.jpg" alt="" width="100" height="100"></a>
+        <a class="navbar-brand text-white" href="/"><img class="img-fluid" src="../../images/logochamsocthucung.jpg" alt="" width="100" height="100"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -44,6 +44,9 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')">
                     <a th:href="@{/doctors}" class="nav-link text-white">QUẢN LÝ BÁC SĨ</a>
                 </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')">
+                    <a th:href="@{/workHour}" class="nav-link text-white">QUẢN LÝ KHUNG GIỜ</a>
+                </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
                     <a th:href="@{/doctors}" class="nav-link text-white">BÁC SĨ</a>
                 </li>
@@ -68,7 +71,7 @@
         </div>
     </div>
 </nav>
-<div class="container mt-5">
+<div class=" mt-5 ml-0">
     <section layout:fragment="content">
         <!-- Nội dung cụ thể của từng trang sẽ được đặt tại đây -->
     </section>
