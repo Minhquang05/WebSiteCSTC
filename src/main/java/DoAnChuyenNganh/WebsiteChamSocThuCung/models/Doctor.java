@@ -16,7 +16,7 @@ public class Doctor {
     private String email;
     private String avatar;
     @OneToMany
-    private List<WorkHourDetail>  workHourDetail;
+  //  private List<WorkHourDetail>  workHourDetail;
 
     // Getters and Setters
     public Long getId() { return id; }

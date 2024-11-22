@@ -22,6 +22,7 @@
                 <th>Số Điện Thoại</th>
                 <th>Email</th>
                 <th>Hành Động</th>
+                <th>Chi Tiết Bác Sĩ</th>
             </tr>
             </thead>
             <tbody>
@@ -35,6 +36,9 @@
                     <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-success btn-sm">Chỉnh Sửa</a>
                     <a th:href="@{/doctors/delete/{id}(id=${doctor.id})}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
+                </td>
+                <td>
+                    <a style="width:100px ; height:30px" th:href="@{/doctors/details/{id}(id=${doctor.id})}" class="btn btn-info btn-sm">Chi tiết</a>
                 </td>
             </tr>
             </tbody>

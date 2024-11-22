@@ -156,7 +156,7 @@ public class ProductController {
 
     @GetMapping("/details/{id}")
     public String showProductDetails(@PathVariable Long id, Model model) {
-        Product product = productService.getProdeuctById(id)
+        Product product = productService.getProductById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
         model.addAttribute("product", product);
         return "/products/products-details";

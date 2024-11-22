@@ -33,6 +33,12 @@
             </div>
 
             <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
+                <div class="invalid-feedback">Vui lòng nhập Email.</div>
+            </div>
+
+            <div class="form-group">
                 <p>Khung gio lam</p>
                 <label for="ca1">8:00</label>
                 <input type="checkbox" id="ca1" >

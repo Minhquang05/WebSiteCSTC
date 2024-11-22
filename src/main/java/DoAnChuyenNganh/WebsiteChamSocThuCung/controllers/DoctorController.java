@@ -1,6 +1,7 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -81,6 +82,14 @@ public class DoctorController {
     public String deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctor(id);
         return "redirect:/doctors"; // Sau khi xóa xong, chuyển về trang danh sách
+    }
+
+    @GetMapping("/details/{id}")
+    public String showDoctorDetails(@PathVariable Long id, Model model) {
+        Doctor doctor = doctorService.getDoctorById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor Id:" + id));
+        model.addAttribute("doctor", doctor);
+        return "/doctors/doctor-details";
     }
 
 }
