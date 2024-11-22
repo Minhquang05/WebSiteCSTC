@@ -30,11 +30,9 @@ public class OrderService {
     @Transactional
     public Order createOrder(Order order, List<CartItem> cartItems, double totalPaid) {
         Date currentDate = new Date();
-        order.setCreatedAt(currentDate);
-        order.setOrderId(String.valueOf(Byte.parseByte("1")));
-        order.setStatus(String.valueOf(totalPaid));
-        order.setTotal(totalPaid);  // Đảm bảo gán giá trị totalPaid vào đơn hàng
-        orderRepository.save(order);
+        order.setCreateDate(currentDate);
+        order.setOrderStatus(Byte.parseByte("1"));
+        order.setTotal(totalPaid);
         order = orderRepository.save(order);
         for (CartItem item : cartItems) {
             OrderDetail detail = new OrderDetail();
@@ -54,11 +52,11 @@ public class OrderService {
 
     public List<Order> getAllOrders(){ return orderRepository.findAll(); }
 
-        public List<Order> getByEmail(String email) {
+    public List<Order> getByEmail(String email) {
         List<Order> myOrder = new ArrayList<>();
         for(Order order : orderRepository.findAll())
         {
-            if(order.getId().equals(email))
+            if(order.getEmail().equals(email))
                 myOrder.add(order);
         }
         return myOrder;
@@ -67,7 +65,7 @@ public class OrderService {
     public Order updateOrderStatus(Long id){
         Order existingOrder = orderRepository.findById(id).orElseThrow(() -> new IllegalStateException("Order with ID " +
                 id + " does not exist."));
-        existingOrder.setStatus(String.valueOf(Byte.parseByte("0")));
+        existingOrder.setOrderStatus(Byte.parseByte("0"));
         return orderRepository.save(existingOrder);
     }
 }

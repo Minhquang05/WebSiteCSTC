@@ -32,40 +32,39 @@ public class OrderController {
         model.addAttribute("order", new Order());
         return "/cart/checkout";
     }
-    @PostMapping("/submit")
-    public String submitOrder(@Valid Order order, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errors", bindingResult.getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .toList());
-            return "/cart/checkout";  // Trả về lại trang checkout nếu có lỗi
-        }
 
-        // Lấy các sản phẩm trong giỏ hàng
-        List<CartItem> cartItems = cartService.getCartItems();
-        if (cartItems.isEmpty()) {
-            return "redirect:/cart"; // Nếu giỏ hàng trống, chuyển hướng về trang giỏ hàng
-        }
-
-        // Tính tổng số tiền thanh toán
-        double totalPaid = 0.0;
-        for (CartItem item : cartItems) {
-            totalPaid += item.getProduct().getPrice() * item.getQuantity();
-        }
-
-        // Đảm bảo rằng totalPaid không phải là null
-        if (totalPaid <= 0) {
-            model.addAttribute("errors", "Total amount cannot be zero or negative.");
-            return "/cart/checkout";  // Nếu tổng số tiền <= 0, thông báo lỗi
-        }
-
-        // Gọi service để tạo đơn hàng
-        orderService.createOrder(order, cartItems, totalPaid);
-        model.addAttribute("order", order);  // Thêm thông tin đơn hàng vào model để hiển thị
-        return "cart/order-confirmation";  // Chuyển hướng tới trang xác nhận
+    @GetMapping("/checkout/{name}")
+    public String checkout(@PathVariable String name, Model model) {
+        User user = userService.findByUsername(name).orElseThrow(() -> new IllegalArgumentException("No user found"));
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("email", user.getEmail());
+        model.addAttribute("phone", user.getPhone());
+        model.addAttribute("order", new Order());
+        return "/cart/checkout";
     }
 
+    @PostMapping("/submit")
+    public String submitOrder(@Valid Order order, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors())
+        {
+            var errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toArray(String[]::new);
+            model.addAttribute("errors", errors);
+            return "/cart/checkout";
+        }
+        List<CartItem> cartItems = cartService.getCartItems();
+        if (cartItems.isEmpty()) {
+            return "redirect:/cart"; // Redirect if cart is empty
+        }
+        double totalPaid = 0.0;
+        for(CartItem item : cartItems){
+            totalPaid += item.getProduct().getPrice()*item.getQuantity();
+        }
+        orderService.createOrder(order, cartItems, totalPaid);
+        return "redirect:/order/confirmation";
+    }
     @GetMapping("/confirmation")
     public String orderConfirmation(Model model) {
         model.addAttribute("message", "Your order has been successfully placed.");
@@ -91,3 +90,4 @@ public class OrderController {
         return "/orders/my-orders";
     }
 }
+
