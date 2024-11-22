@@ -121,8 +121,6 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
-
-
 			<!-- Các dependencies khác nếu cần -->
 		</dependencies>
 
