@@ -3,7 +3,6 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.services;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Category;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHourDetail;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.repositories.WorkHourRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

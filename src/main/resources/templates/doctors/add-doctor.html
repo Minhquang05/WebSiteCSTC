@@ -21,6 +21,12 @@
             </div>
 
             <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
+                <div class="invalid-feedback">Vui lòng nhập email.</div>
+            </div>
+
+            <div class="form-group">
                 <label for="specialization">Chuyên Môn</label>
                 <input type="text" id="specialization" th:field="*{specialization}" class="form-control" placeholder="Nhập chuyên môn" required>
                 <div class="invalid-feedback">Vui lòng nhập chuyên môn.</div>
@@ -33,34 +39,16 @@
             </div>
 
             <div class="form-group">
-                <p>Khung gio lam</p>
-                <label for="ca1">8:00</label>
-                <input type="checkbox" id="ca1" >
+                <label for="workTime" class="form-label">Giờ làm:</label>
+                <select th:field="*{workTime}" class="form-control" id="workTime" multiple>
+                    <option th:each="workhour : ${workhours}"
+                            th:value="${workhour.id}" th:text="${workhour.StartTime}"></option>
+                    </select>
+            </div>
 
-                <label for="ca2">9:00</label>
-                <input type="checkbox" id="ca2" >
-
-
-                <label for="ca3">10:00</label>
-                <input type="checkbox" id="ca3"  >
-
-
-                <label for="ca4">11:00</label>
-                <input type="checkbox" id="ca4" >
-
-
-                <label for="ca5">14:00</label>
-                <input type="checkbox" id="ca5" >
-
-
-                <label for="ca6">15:00</label>
-                <input type="checkbox" id="ca6" >
-
-
-                <label for="ca7">16:00</label>
-                <input type="checkbox" id="ca7" >
-
-
+            <div class="form-group">
+                <label for="avatar">Ảnh đại diện:</label>
+                <input type="file" id="avatar" name="avatar" th:field="*{avatar}" class="form-control">
             </div>
 
             <button type="submit" class="btn btn-primary">Lưu Bác Sĩ</button>

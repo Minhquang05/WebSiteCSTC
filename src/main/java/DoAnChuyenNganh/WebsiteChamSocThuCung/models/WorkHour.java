@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
 @Setter
 @Getter
 @RequiredArgsConstructor
@@ -22,6 +24,8 @@ public class WorkHour {
     @Column(name = "START_TIME")
     private String StartTime;
 
-    @OneToMany
-    private List<WorkHourDetail>  workHourDetail;
+    @ManyToMany(mappedBy = "workTime")
+    List<Doctor> doctors;
+//    @OneToMany(mappedBy = "WorkHour")
+//    private List<WorkHourDetail>  workHourDetail;
 }

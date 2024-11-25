@@ -1,12 +1,22 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.services.WorkHourService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +26,9 @@ public class DoctorController {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private WorkHourService workHourService;
 
     // Hiển thị danh sách bác sĩ
     @GetMapping
@@ -29,6 +42,7 @@ public class DoctorController {
     @GetMapping("/add")
     public String getAddDoctorPage(Model model) {
         model.addAttribute("doctor", new Doctor());
+        model.addAttribute("workhours", workHourService.getAllWorkHour());
         return "doctors/add-doctor";
     }
 
@@ -83,4 +97,35 @@ public class DoctorController {
         return "redirect:/doctors"; // Sau khi xóa xong, chuyển về trang danh sách
     }
 
+    @GetMapping("/detail/{id}")
+    public String detailDoctor(@PathVariable Long id, Model model) {
+        Doctor doctor = doctorService.getDoctorById(id).orElseThrow(() -> new IllegalArgumentException("Invalid doctor Id:" + id));
+        model.addAttribute("doctor", doctor);
+        return "/doctors/doctor-details";
+    }
+
+    @PostMapping("/add/{id}")
+    public String addDoctor(@Valid Doctor doctor, BindingResult result, @RequestParam("avatar") MultipartFile file) {
+        if (result.hasErrors()) {
+            return "/doctors/add-doctor";
+        }
+        String avatarUrl = "";
+        if (!file.isEmpty()) {
+            try {
+                File dir = new File("src/main/resources/static/images/");
+                if (!dir.exists())
+                    dir.mkdirs();
+                if (!file.isEmpty()) {
+                    String imagePath = "images/" + file.getOriginalFilename();
+                    Files.write(Paths.get("src/main/resources/static/" + imagePath), file.getBytes());
+                    avatarUrl=imagePath;
+                }
+            } catch (Exception e) {
+                return "You failed to upload "   + " => " + e.getMessage();
+            }
+        }
+        doctor.setAvatar(avatarUrl);
+        doctorService.saveDoctor(doctor);
+        return "redirect:/doctors";
+    }
 }
