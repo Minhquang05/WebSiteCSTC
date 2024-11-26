@@ -1,5 +1,6 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Category;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
@@ -84,17 +85,10 @@ public class DoctorController {
     public String getDeleteDoctorPage(@PathVariable Long id, Model model) {
         Optional<Doctor> doctor = doctorService.getDoctorById(id);
         if (doctor.isPresent()) {
-            model.addAttribute("doctor", doctor.get());
-            return "doctors/confirm-delete"; // Trang xác nhận xóa
+            doctorService.deleteDoctor(id);
+            return "redirect:/doctors"; // Trang xác nhận xóa
         }
         return "redirect:/doctors";
-    }
-
-    // Xử lý xóa bác sĩ
-    @PostMapping("/delete/{id}")
-    public String deleteDoctor(@PathVariable Long id) {
-        doctorService.deleteDoctor(id);
-        return "redirect:/doctors"; // Sau khi xóa xong, chuyển về trang danh sách
     }
 
     @GetMapping("/detail/{id}")
@@ -128,4 +122,5 @@ public class DoctorController {
         doctorService.saveDoctor(doctor);
         return "redirect:/doctors";
     }
+
 }

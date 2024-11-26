@@ -30,7 +30,7 @@
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.phone}"></td>
                 <td>
-                    <a  th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
+                    <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
                     <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Are you sure?')">Xóa</a>
                 </td>
