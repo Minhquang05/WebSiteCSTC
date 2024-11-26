@@ -15,7 +15,7 @@
     </p>
 </div>
 <nav class="navbar navbar-expand-lg navbar-light bg-success mt-2"
-    style="height:80px">
+     style="height:80px">
     <div class="container-fluid">
         <a class="navbar-brand text-white" href="/"><img class="img-fluid" src="../../images/logochamsocthucung.jpg" alt="" width="100" height="100"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -36,25 +36,31 @@
                     <a th:href="@{/employees}" class="nav-link text-white">NHÂN VIÊN</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN','EMPLOYEE')">
-                    <a th:href="@{/order/admin}" class="nav-link text-white">ĐƠN HÀNG</a>
+                    <a th:href="@{/order/employee}" class="nav-link text-white">ĐƠN HÀNG</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
                     <a id="myOrders" href="#" class="nav-link text-white">ĐƠN HÀNG</a>
                 </li>
-                
                 <!-- Thêm phần Bác sĩ -->
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')">
                     <a th:href="@{/doctors}" class="nav-link text-white">QUẢN LÝ BÁC SĨ</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
                     <a th:href="@{/workHour}" class="nav-link text-white">QUẢN LÝ KHUNG GIỜ</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER','EMPLOYEE','DOCTOR')">
+                    <a th:href="@{/homedoctors}" class="nav-link text-white">BÁC SĨ</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
+                    <a th:href="@{/profiles/{userId}}" class="nav-link text-white">HO SO</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'DOCTOR')">
                     <a th:href="@{/appointments}" class="nav-link text-white">ĐẶT LỊCH KHÁM</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-                
+
                 <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a id="myCart" class="nav-link text-white" th:ref="@{/cart/}"><img class="img-fluid" src="../../images/images-removebg-preview.png" width="40"></a>
                 </li>
@@ -62,7 +68,7 @@
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a id="cart" class="nav-link text-white" th:href="@{/cart}"><img class="img-fluid" src="../../images/images-removebg-preview.png" width="40"></a>
                 </li>
-                
+
                 <li class="nav-item d-flex align-items-center" sec:authorize="isAuthenticated()">
                     <span class="navbar-text text-white">Xin chào,</span>
                     <a id="username" sec:authentication="name" class="mr-5 nav-link active text-white" href="#"></a>

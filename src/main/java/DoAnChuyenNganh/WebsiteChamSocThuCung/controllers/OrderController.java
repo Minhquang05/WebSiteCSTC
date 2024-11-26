@@ -77,10 +77,23 @@ public class OrderController {
         return "/orders/orders-list";
     }
 
+    @GetMapping("/employee")
+    public String showOrderemployee(Model model){
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "/orders/orders-list";
+    }
+
+
     @GetMapping("/updateStatus/{id}")
     public String updateOrderStatus(@PathVariable Long id){
         orderService.updateOrderStatus(id);
         return "redirect:/order/admin";
+    }
+
+    @GetMapping("/updateStatusemployee/{id}")
+    public String updateOrderStatusemployee(@PathVariable Long id){
+        orderService.updateOrderStatus(id);
+        return "redirect:/order/employee";
     }
 
     @GetMapping("/{name}")
