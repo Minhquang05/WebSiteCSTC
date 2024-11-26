@@ -15,10 +15,23 @@
 
         <div class="card">
             <div class="card-body">
+                <img th:src="@{'/images/' + ${doctor.avatar}}" alt="Doctor Images" class="img-fluid" width="160" >
                 <h5 class="card-title" th:text="${doctor.name}">Tên Bác Sĩ</h5>
                 <p class="card-text"><strong>Chuyên Môn:</strong> <span th:text="${doctor.specialization}">Chuyên Môn</span></p>
                 <p class="card-text"><strong>Số Điện Thoại:</strong> <span th:text="${doctor.phone}">Số Điện Thoại</span></p>
                 <p class="card-text"><strong>Email:</strong> <span th:text="${doctor.email}">Email</span></p>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Giờ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="time : ${doctor.workTime}">
+                        <td th:text="${time.StartTime}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

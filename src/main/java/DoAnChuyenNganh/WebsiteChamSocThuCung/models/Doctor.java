@@ -1,11 +1,19 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
-
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
+@Table(name = "doctor")
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,24 +23,16 @@ public class Doctor {
     private String phone;
     private String email;
     private String avatar;
-    @OneToMany
-//    private List<WorkHourDetail>  workHourDetail;
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_worktime",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "WorkHour_id")
+    )
+    List<WorkHour> workTime;
 
     // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getSpecialization() { return specialization; }
-    public void setSpecialization(String specialization) { this.specialization = specialization; }
-
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
 
 }
 

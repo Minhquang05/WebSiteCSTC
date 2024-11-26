@@ -20,7 +20,7 @@
                 <th>Tên nhân viên</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
-                <th>Trạng thái</th>
+                <th>Chức năng</th>
             </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.phone}"></td>
                 <td>
-                    <a  th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
+                    <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
                     <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Are you sure?')">Xóa</a>
                 </td>

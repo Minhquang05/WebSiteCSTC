@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
     <title th:text="${title} ?: 'Your Cart'">Order Confirmation</title>
@@ -9,9 +9,8 @@
 </head>
 <body>
 <section layout:fragment="content" class="container mt-3">
-    <h1>Order Confirmation</h1>
+    <h1>Xác nhận đơn hàng</h1>
     <p th:text="${message}"></p>
-    <a sec:authorize="isAuthenticated()" th:href="@{/momos/momo-payment}" class="btn btn-primary">Thanh toan</a>
 </section>
 </body>
 </html>

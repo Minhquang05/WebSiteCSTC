@@ -11,30 +11,30 @@
 <body>
 <section layout:fragment="content" class="container mt-5">
     <div class="container">
-        <h2 class="mt-4 mb-4">Danh Sách Bác Sĩ</h2>
-        <a href="/doctors/add" class="btn btn-primary mb-4">Thêm Bác Sĩ Mới</a>
-        <table class="table table-striped">
-            <thead class="thead-dark">
+        <h2 class="mt-4 mb-4">DANH SÁCH BÁC SĨ</h2>
+        <a href="/doctors/add" class="btn btn-primary mb-3">Thêm Bác Sĩ Mới</a>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
             <tr>
-                <th>ID</th>
-                <th>Tên</th>
-                <th>Chuyên Môn</th>
+                <th>Mã bác sĩ</th>
+                <th>Tên bác sĩ</th>
                 <th>Số Điện Thoại</th>
                 <th>Email</th>
-                <th>Hành Động</th>
+                <th>Chức năng</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="doctor : ${doctors}">
                 <td th:text="${doctor.id}"></td>
                 <td th:text="${doctor.name}"></td>
-                <td th:text="${doctor.specialization}"></td>
                 <td th:text="${doctor.phone}"></td>
                 <td th:text="${doctor.email}"></td>
                 <td>
+                    <a th:href="@{/doctors/detail/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">Chi tiết</a>
                     <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-success btn-sm">Chỉnh Sửa</a>
                     <a th:href="@{/doctors/delete/{id}(id=${doctor.id})}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
+
                 </td>
             </tr>
             </tbody>

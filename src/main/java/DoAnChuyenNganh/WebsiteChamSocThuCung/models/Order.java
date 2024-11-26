@@ -1,11 +1,9 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.OrderDetail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 
 import java.util.Date;
 import java.util.List;
@@ -19,8 +17,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "CUSTOMER_NAME")
-    private String customerName;
+        @Column(name = "CUSTOMER_NAME")
+        private String customerName;
     @Column(name = "ADDRESS")
     private String address;
     @Column(name = "PHONE_NUMBER")

@@ -52,7 +52,7 @@ public class OrderService {
 
     public List<Order> getAllOrders(){ return orderRepository.findAll(); }
 
-    public List<Order> getByEmail(String email) {
+        public List<Order> getByEmail(String email) {
         List<Order> myOrder = new ArrayList<>();
         for(Order order : orderRepository.findAll())
         {
