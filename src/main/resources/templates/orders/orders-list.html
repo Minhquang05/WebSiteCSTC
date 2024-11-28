@@ -26,12 +26,12 @@
                 <td th:text="${order.id}"></td>
                 <td th:text="${order.customerName}"></td>
                 <td th:text="${order.createDate}"></td>
-
                 <td th:if="${order.orderStatus == 0}" class="text-success">Đã giao</td>
                 <div th:if="${order.orderStatus == 1}">
                     <td class="text-warning">Đang giao hàng</td>
-                    <td><a th:href="@{/order/updateStatus/{id}(id=${order.id})}" class="btn btn-success btn-sm">Cập nhật trạng thái</a></td>
+                    <td><a th:href="@{/order/updateStatusemployee/{id}(id=${order.id})}" class="btn btn-success btn-sm">Cập nhật trạng thái</a></td>
                 </div>
+
             </tr>
             </tbody>
         </table>
