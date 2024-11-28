@@ -1,8 +1,17 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Appointment {
 
@@ -14,9 +23,12 @@ public class Appointment {
     private String customerEmail;
     private String customerPhone;
     private LocalDateTime appointmentDate;
+    private String note;
+    private int appointmentState;
 
     @ManyToOne
-    private Doctor doctor;  // Liên kết với bác sĩ
-    // Getters and setters...
+    private Doctor doctor;
+
+    // Getters và setters
 
 }
