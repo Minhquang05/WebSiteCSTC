@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group">
                             <label for="appointmentNote">Ghi chú</label>
-                            <input th:field="*{appointment.note}" type="text" id="appointmentNote" class="form-control" readonly>
+                            <input th:field="*{appointment.note}" type="text" id="appointmentNote" class="form-control" required>
                         </div>
                     </form>
                 </div>
@@ -155,10 +155,10 @@
     let selector = document.getElementById('doctor');
     let value = selector[selector.selectedIndex].value;
     for(let i=0;i<selector.length;i++){
-        if(i+1==value)
-            document.getElementById(i+1).hidden = false;
+        if(selector[i].value==value)
+            document.getElementById(selector[i].value).hidden = false;
         else
-            document.getElementById(i+1).hidden = true;
+            document.getElementById(selector[i].value).hidden = true;
     }
     }
 </script>
