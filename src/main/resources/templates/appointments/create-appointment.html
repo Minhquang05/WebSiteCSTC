@@ -23,6 +23,7 @@
 
 <div class="container">
     <h2>Đặt Lịch Khám Thú Y</h2>
+    <button type="button" class="btn btn-info" onclick="window.location.href='/appointments'">Quay lại</button>
     <div id="calendar"></div>
 
     <!-- Form Đặt Lịch -->
@@ -94,6 +95,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
+        // Danh sách các ngày lễ ở Việt Nam theo định dạng 'MM-DD'
+        const holidays = [
+            '01-01', // Tết Dương Lịch
+            '04-30', // Ngày Giải Phóng Miền Nam
+            '05-01', // Ngày Lao Động
+            '09-02', // Ngày Quốc Khánh
+        ];
+
         // Khởi tạo FullCalendar
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -103,30 +112,53 @@
             dateClick: function(info) {
                 // Khi người dùng click vào một ngày, hiển thị form đặt lịch
                 var selectedDate = info.dateStr;
-                document.getElementById('appointmentDate').value = selectedDate;
-                $('#appointmentModal').modal('show');
+                if (isSunday(selectedDate) || isHoliday(selectedDate)) {
+                    alert("Xin lỗi! bạn hãy chọn ngày khác vì ngày này cửa hàng đóng cửa!");
+                } else {
+                    document.getElementById('appointmentDate').value = selectedDate;
+                    $('#appointmentModal').modal('show');
+                }
             }
         });
 
         // Hiển thị lịch
         calendar.render();
 
+        // Kiểm tra xem ngày có phải là Chủ Nhật không
+        function isSunday(date) {
+            var day = new Date(date).getDay();
+            return day === 0;  // 0 là Chủ Nhật trong JavaScript
+        }
+
+        // Kiểm tra xem ngày có phải là ngày lễ không
+        function isHoliday(date) {
+            // Lấy phần tháng và ngày từ chuỗi ngày (YYYY-MM-DD)
+            const dayMonth = date.slice(5);  // Lấy phần ngày-tháng (MM-DD)
+            return holidays.includes(dayMonth);  // Kiểm tra xem ngày-tháng có trong danh sách lễ không
+        }
+
         // Xử lý khi người dùng đặt lịch
-        document.getElementById('submitAppointment').addEventListener('click', function() {
-            var customerName = document.getElementById('customerName').value;
-            var customerPhone = document.getElementById('customerPhone').value;
-            var appointmentDate = document.getElementById('appointmentDate').value;
-            var doctor = document.getElementById('doctor').value;
+       document.getElementById('submitAppointment').addEventListener('click', function() {
+    var customerName = document.getElementById('customerName').value;
+    var customerEmail = document.getElementById('customerEmail').value;
+    var customerPhone = document.getElementById('customerPhone').value;
+    var appointmentDate = document.getElementById('appointmentDate').value;
+    var doctor = document.getElementById('doctor').value;
+    var time = document.getElementById('time').value;  // Thêm thời gian
+    var customerNote = document.getElementById('customerNote').value;  // Thêm ghi chú khách hàng
 
-            if (customerName && customerPhone && appointmentDate) {
-                // Gửi yêu cầu tạo lịch khám đến server (đảm bảo đã cấu hình backend để xử lý)
-                var data = {
-                    customerName: customerName,
-                    customerPhone: customerPhone,
-                    appointmentDate: appointmentDate,
-                    doctorId: doctor
-                };
-
+    // Kiểm tra các trường bắt buộc
+    if (customerName && customerPhone && appointmentDate && time && doctor) {
+        // Gửi yêu cầu tạo lịch khám đến server (đảm bảo đã cấu hình backend để xử lý)
+        var data = {
+            customerName: customerName,
+            customerEmail: customerEmail,  // Bao gồm email
+            customerPhone: customerPhone,
+            appointmentDate: appointmentDate,
+            time: time,  // Thêm thời gian cuộc hẹn
+            doctorId: doctor,
+            customerNote: customerNote  // Thêm ghi chú nếu có
+        };
                 // Sử dụng fetch API để gửi yêu cầu POST đến server (ví dụ "/appointments/create")
                 fetch('/appointments/create', {
                     method: 'POST',
@@ -150,18 +182,18 @@
         });
     });
 
-   document.getElementById("doctor").onchange = function(){
-
-    let selector = document.getElementById('doctor');
-    let value = selector[selector.selectedIndex].value;
-    for(let i=0;i<selector.length;i++){
-        if(selector[i].value==value)
-            document.getElementById(selector[i].value).hidden = false;
-        else
-            document.getElementById(selector[i].value).hidden = true;
-    }
+    document.getElementById("doctor").onchange = function() {
+        let selector = document.getElementById('doctor');
+        let value = selector[selector.selectedIndex].value;
+        for (let i = 0; i < selector.length; i++) {
+            if (selector[i].value == value)
+                document.getElementById(selector[i].value).hidden = false;
+            else
+                document.getElementById(selector[i].value).hidden = true;
+        }
     }
 </script>
+
 
 </body>
 </html>
