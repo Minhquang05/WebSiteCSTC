@@ -1,5 +1,6 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.User;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.UserService;
 import jakarta.validation.Valid;
@@ -51,7 +52,9 @@ public class UserController {
 
     @GetMapping("/profile/{name}")
     public String showUserProfile(@PathVariable String name, Model model){
-        model.addAttribute("user",userService.findByUsername(name));
+        User user = userService.findByUsername(name)
+                .orElseThrow(() -> new IllegalArgumentException("Can't find this username: " + name));
+        model.addAttribute("user", user);
         return "/users/profile";
     }
 }
