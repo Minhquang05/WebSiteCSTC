@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${title} ?: 'LỊCH HẸN'">LỊCH HẸN</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">DANH SÁCH LỊCH HẸN</h2>
+        <div>
+            <a  th:href="@{/appointments/create}" class="btn btn-primary mb-3">
+                Đặt lịch hẹn
+            </a>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>Mã lịch hẹn</th>
+                <th>Ngày đặt</th>
+                <th>Trạng thái</th>
+                <th>Chức năng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="appointment : ${appointments}">
+                <td style="font-size: 1em;" th:text="${appointment.id}"></td>
+                <td style="font-size: 1em;" th:text="${appointment.appointmentDate}"></td>
+                <td style="font-size: 1em;" th:text="${appointment.appointmentState}"></td>
+                <td>
+                    <a style="width:100px ; height:30px" th:href="@{#}" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a style="width:100px ; height:30px" th:href="@{#}" class="btn btn-info btn-sm">Hủy</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+
+<script th:src="@{../static/js/jquery.min.js}"></script>
+</html>

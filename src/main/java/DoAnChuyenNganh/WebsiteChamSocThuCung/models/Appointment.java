@@ -1,22 +1,43 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import lombok.*;
+
 import java.time.LocalDateTime;
+import java.util.Date;
 
+
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
+@Table(name = "appointment")
 public class Appointment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long id;
-
+    @Column(name = "CUSTOMER_NAME")
     private String customerName;
+    @Column(name = "CUSTOMER_EMAIL")
     private String customerEmail;
+    @Column(name = "CUSTOMER_PHONE")
     private String customerPhone;
-    private LocalDateTime appointmentDate;
+    @Column(name = "APPOINTMENT_DATE")
+    private Date appointmentDate;
+    @Column(name = "NOTE")
+    private String note;
+    @Column(name ="APPOINTMENT_STATE")
+    private int appointmentState;
 
     @ManyToOne
-    private Doctor doctor;  // Liên kết với bác sĩ
-    // Getters and setters...
+    @JoinColumn(name = "DOCTOR_ID")
+    private Doctor doctor;
+
+    // Getters và setters
 
 }

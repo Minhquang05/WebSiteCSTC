@@ -24,10 +24,7 @@ public class ProductService {
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
-    public Optional<Product> getProdeuctById(Long id){
 
-        return productRepository.findById(id);
-    }
     public List<Product> getProductsByName(String keyword) {
         return productRepository.findAll(keyword);
     }
