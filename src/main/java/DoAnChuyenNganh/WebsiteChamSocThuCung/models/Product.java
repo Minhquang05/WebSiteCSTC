@@ -36,10 +36,4 @@ public class Product {
     private Category category;
     @Column(name = "IS_REMOVED")
     private byte isRemoved;
-
-
-    public long roundPrice()
-    {
-        return Math.round(price);
-    }
 }

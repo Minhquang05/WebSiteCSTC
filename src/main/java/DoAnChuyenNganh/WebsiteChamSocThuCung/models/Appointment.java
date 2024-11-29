@@ -10,10 +10,8 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "appointment")
 public class Appointment {
