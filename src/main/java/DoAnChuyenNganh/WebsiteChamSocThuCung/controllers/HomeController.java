@@ -2,6 +2,7 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Controller public class HomeController {
     @Autowired
