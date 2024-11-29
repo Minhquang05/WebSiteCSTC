@@ -25,8 +25,8 @@ public class AppointmentService {
     }
 
     public Appointment createAppointment(Appointment appointment) {
-
-        return appointmentRepository.save(appointment);
+        appointmentRepository.save(appointment);
+        return appointment;
     }
 
     public Appointment updateAppointmentState(@NotNull Appointment appointment) {

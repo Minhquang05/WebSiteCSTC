@@ -4,12 +4,17 @@ import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.AppointmentService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -37,9 +42,19 @@ public class AppointmentController {
         return "appointments/create-appointment";  // Trang form đặt lịch khám
     }
     @PostMapping("/create")
-    public String createAppointment(@RequestBody Appointment appointment) {
-        appointmentService.createAppointment(appointment);
-        return "redirect:/appointments";
+    public String createAppointment(Appointment appointment, @RequestParam String appointmentDate, @RequestParam String time) {
+        try{
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+            appointmentDate = appointmentDate + " " + time.replace("h",":00 AM");
+            System.out.println("Appointment date: "+ appointmentDate);
+            appointment.setAppointmentDate(df.parse(appointmentDate));
+            appointment.setAppointmentState(0);
+            appointmentService.createAppointment(appointment);
+            return "redirect:/appointments";
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        return "appointments/create-appointment";
     }
 
     // Trang thành công

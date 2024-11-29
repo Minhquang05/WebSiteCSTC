@@ -3,6 +3,7 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,8 @@ public class Doctor {
             inverseJoinColumns = @JoinColumn(name = "WorkHour_id")
     )
     List<WorkHour> workTime;
-
+    @OneToMany(mappedBy = "doctor")
+    private Set<Appointment> appointments = new HashSet<>();
     // Getters and Setters
 
 

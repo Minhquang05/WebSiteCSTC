@@ -37,7 +37,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="appointmentForm">
+                    <form id="appointmentForm" th:action="@{/appointments/create}"  method="post">
                         <div class="form-group">
                             <label for="customerName">Tên Khách Hàng</label>
                             <input th:field="*{appointment.customerName}" type="text" id="customerName" class="form-control" required>
@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group">
                             <label for="appointmentDate">Ngày Giờ Khám</label>
-                            <input type="text" id="appointmentDate" class="form-control" readonly>
+                            <input type="text" id="appointmentDate" name="appointmentDate" class="form-control" readonly>
                         </div>
                         <div class="form-group">
                             <label for="doctor">Chọn Bác Sĩ</label>
@@ -63,7 +63,7 @@
                         </div>
                         <label>Chọn Khung giờ</label>
                         <div th:each="doctor : ${doctors}" class="form-group">
-                            <select  class="form-control" th:id="${doctor.id}" hidden="true">
+                            <select  class="form-control" th:id="${doctor.id}" name="time" hidden="true">
                                 <option th:each=" time : ${doctor.workTime}"
                                         th:value="${time.id}" th:text="${time.StartTime}"></option>
                             </select>
@@ -72,12 +72,13 @@
                             <label for="appointmentNote">Ghi chú</label>
                             <input th:field="*{appointment.note}" type="text" id="appointmentNote" class="form-control" required>
                         </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary" >Đặt Lịch</button>
+                        </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="submitAppointment">Đặt Lịch</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -138,14 +139,11 @@
         }
 
         // Xử lý khi người dùng đặt lịch
-       document.getElementById('submitAppointment').addEventListener('click', function() {
+     /*  document.getElementById('submitAppointment').addEventListener('click', function() {
     var customerName = document.getElementById('customerName').value;
     var customerEmail = document.getElementById('customerEmail').value;
     var customerPhone = document.getElementById('customerPhone').value;
     var appointmentDate = document.getElementById('appointmentDate').value;
-    var doctor = document.getElementById('doctor').value;
-    var time = document.getElementById('time').value;  // Thêm thời gian
-    var customerNote = document.getElementById('customerNote').value;  // Thêm ghi chú khách hàng
 
     // Kiểm tra các trường bắt buộc
     if (customerName && customerPhone && appointmentDate && time && doctor) {
@@ -155,9 +153,6 @@
             customerEmail: customerEmail,  // Bao gồm email
             customerPhone: customerPhone,
             appointmentDate: appointmentDate,
-            time: time,  // Thêm thời gian cuộc hẹn
-            doctorId: doctor,
-            customerNote: customerNote  // Thêm ghi chú nếu có
         };
                 // Sử dụng fetch API để gửi yêu cầu POST đến server (ví dụ "/appointments/create")
                 fetch('/appointments/create', {
@@ -179,7 +174,7 @@
             } else {
                 alert('Vui lòng điền đầy đủ thông tin!');
             }
-        });
+        });*/
     });
 
     document.getElementById("doctor").onchange = function() {
