@@ -3,6 +3,7 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,8 +32,5 @@ public class Doctor {
     )
     List<WorkHour> workTime;
 
-    // Getters and Setters
-
 
 }
-
