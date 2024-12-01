@@ -31,6 +31,8 @@ public class Doctor {
             inverseJoinColumns = @JoinColumn(name = "WorkHour_id")
     )
     List<WorkHour> workTime;
+    // Getters and Setters
 
 
 }
+

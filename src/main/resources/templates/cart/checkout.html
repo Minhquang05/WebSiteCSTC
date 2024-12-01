@@ -18,34 +18,30 @@
                 <li th:each="error : ${errors}" th:text="${error}" class="textdanger text-start"></li>
             </ul>
         </div>
-<!--        <div class="form-group mb-4" sec:authorize="!isAuthenticated()">-->
-<!--            <label for="name" class="form-label">Tên:</label>-->
-<!--            <input type="text" id="name" name="customerName" class="form-control" required>-->
-<!--        </div>-->
         <div class="form-group mb-4" sec:authorize="isAuthenticated()">
             <label for="customerName" class="form-label">Tên:</label>
-            <input th:value="${username}" type="text" id="customerName" name="customerName" class="form-control" readonly>
+            <input th:value="${username}" type="text" id="customerName" name="customerName" class="form-control">
         </div>
         <div class="form-group mb-4" sec:authorize="!isAuthenticated()">
             <label for="email">Email:</label>
             <input type="email" pattern=".+@gmail\.com" class="form-control" id="email" name="email"
-                   placeholder="Enter your email" onchange="assignUsername()" required>
+                   placeholder="Enter your email" onchange="assignUsername()">
         </div>
         <div class="form-group mb-4" sec:authorize="isAuthenticated()">
             <label for="email">Email:</label>
             <input th:value="${email}" type="email" pattern=".+@gmail\.com" class="form-control" id="customerEmail" name="email"
-                    onchange="assignUsername()" readonly>
+                    onchange="assignUsername()">
         </div>
         <div class="mb-3">
             <label for="address" class="form-label">Địa chỉ:</label>
-            <input type="text" class="form-control" id="address" name="address" required/>
+            <input type="text" class="form-control" id="address" name="address">
         </div>
         <div class="form-group mb-4" sec:authorize="!isAuthenticated()">
             <label for="phone">Số điện thoại:</label><input type="tel" class="form-control" id="phone" name="phone"
-                                              placeholder="Enter your phone" required>
+                                              placeholder="Enter your phone">
         </div>
         <div class="form-group mb-4" sec:authorize="isAuthenticated()">
-            <label for="phone">Số điện thoại:</label><input th:value="${phone}" type="tel" class="form-control" id="customerPhone" name="phone" readonly>
+            <label for="phone">Số điện thoại:</label><input th:value="${phone}" type="tel" class="form-control" id="customerPhone" name="phone">
         </div>
         <div class="mb-3">
             <label for="note" class="form-label">Ghi chú:</label>

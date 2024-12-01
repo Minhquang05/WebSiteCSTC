@@ -37,7 +37,7 @@
         <a th:href="@{/cart/clear}" class="btn btn-secondary">Dọn giỏ hàng</a>
         |
         <a sec:authorize="!isAuthenticated()" th:href="@{/order/checkout}" class="btn btn-primary">Xuất hóa đơn</a>
-        <a sec:authorize="isAuthenticated()" th:href="@{/order/checkout/{name}(name=${username})}" class="btn btn-primary">Xuất hóa đơn</a>
+        <a sec:authorize="isAuthenticated()" th:href="@{/order/checkout{name}(name=${username})}" class="btn btn-primary">Xuất hóa đơn</a>
     </div>
 </section>
 </body>

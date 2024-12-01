@@ -5,54 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt Lịch Khám</title>
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f7fa;
         }
         .container {
             margin-top: 30px;
         }
         .fc-daygrid-day-number {
             color: black;
-            font-weight: bold;
-        }
-        .fc-header-toolbar {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 0;
-        }
-        .fc-button-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        .fc-button-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-        .modal-content {
-            background-color: #ffffff;
-            border-radius: 8px;
-        }
-        .modal-header {
-            background-color: #007bff;
-            color: white;
-            border-bottom: none;
-        }
-        .modal-footer {
-            border-top: none;
-        }
-        .form-control, select {
-            border-radius: 5px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2 class="text-center text-primary">Đặt Lịch Khám Thú Y</h2>
-    <button type="button" class="btn btn-info mb-3" onclick="window.location.href='/appointments'">Quay lại</button>
+    <h2>Đặt Lịch Khám Thú Y</h2>
+    <button type="button" class="btn btn-info" onclick="window.location.href='/appointments'">Quay lại</button>
     <div id="calendar"></div>
 
     <!-- Form Đặt Lịch -->
@@ -61,60 +31,63 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="appointmentModalLabel">Đặt Lịch Khám</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form id="appointmentForm" th:action="@{/appointments/create}" th:object="${appointment}" method="post"
                           class="needs-validation" novalidate>
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <label for="customerName">Tên Khách Hàng</label>
                             <input th:field="*{customerName}" type="text" id="customerName" class="form-control" required>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <label for="customerEmail">Email</label>
-                            <input th:field="*{customerEmail}" type="email" id="customerEmail" class="form-control" required>
+                            <input th:field="*{customerEmail}" type="text" id="customerEmail" class="form-control" required>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <label for="customerPhone">Số Điện Thoại</label>
                             <input th:field="*{customerPhone}" type="text" id="customerPhone" class="form-control" required>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <label for="apntDate">Ngày Giờ Khám</label>
                             <input type="text" id="apntDate" name="apntDate" class="form-control" readonly>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <label for="doctor">Chọn Bác Sĩ</label>
                             <select th:field="*{doctor}" class="form-control" id="doctor">
-                                <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.name}"></option>
+                                <option th:each="doctor : ${doctors}"
+                                        th:value="${doctor.id}" th:text="${doctor.name}"></option>
                             </select>
                         </div>
-                        <div class="form-group mb-3">
-                            <label>Chọn Khung giờ</label>
-                            <div th:each="doctor : ${doctors}" class="form-group">
-                                <select class="form-control" th:id="${doctor.id}" name="availableTime" disabled="true" hidden="true">
-                                    <option th:each=" time : ${doctor.workTime}"
-                                            th:value="${time.id}" th:text="${time.StartTime}"></option>
-                                </select>
-                            </div>
+                        <label>Chọn Khung giờ</label>
+                        <div th:each="doctor : ${doctors}" class="form-group">
+                            <select  class="form-control" th:id="${doctor.id}" name="availableTime" disabled="true" hidden="true">
+                                <option th:each=" time : ${doctor.workTime}"
+                                        th:value="${time.id}" th:text="${time.StartTime}"></option>
+                            </select>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group">
                             <label for="appointmentNote">Ghi chú</label>
-                            <input th:field="*{note}" type="text" id="appointmentNote" class="form-control">
+                            <input th:field="*{note}" type="text" id="appointmentNote" class="form-control" required>
                         </div>
-                        <div class="form-group d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Đặt Lịch</button>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary" >Đặt Lịch</button>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 
 <!-- Thêm jQuery và các thư viện Bootstrap -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <!-- Thêm FullCalendar JS -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
@@ -134,22 +107,26 @@
         // Khởi tạo FullCalendar
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
-            locale: 'vi',
-            selectable: true,
-            events: [],
+            locale: 'vi',  // Thiết lập ngôn ngữ là tiếng Việt
+            selectable: true, // Cho phép người dùng chọn ngày
+            events: [],  // Sự kiện sẽ được tải từ backend
             dateClick: function(info) {
+                // Khi người dùng click vào một ngày, hiển thị form đặt lịch
                 var selectedDate = info.dateStr;
                 if (isSunday(selectedDate) || isHoliday(selectedDate)) {
-                    alert("Xin lỗi! Bạn hãy chọn ngày khác vì ngày này cửa hàng đóng cửa!");
+                    alert("Xin lỗi! bạn hãy chọn ngày khác vì ngày này cửa hàng đóng cửa!");
                 } else {
                     document.getElementById('apntDate').value = selectedDate;
-                    let selector = document.getElementById('doctor');
+                     let selector = document.getElementById('doctor');
                     let value = selector[selector.selectedIndex].value;
-                    for (let i = 0; i < selector.length; i++) {
-                        if (selector[i].value == value) {
+                    for (let i = 0; i < selector.length; i++)
+                     {
+                        if (selector[i].value == value)
+                        {
                             document.getElementById(selector[i].value).disabled = false;
                             document.getElementById(selector[i].value).hidden = false;
-                        } else {
+                        }
+                        else{
                             document.getElementById(selector[i].value).disabled = true;
                             document.getElementById(selector[i].value).hidden = true;
                         }
@@ -159,33 +136,43 @@
             }
         });
 
+        // Hiển thị lịch
         calendar.render();
 
+        // Kiểm tra xem ngày có phải là Chủ Nhật không
         function isSunday(date) {
             var day = new Date(date).getDay();
-            return day === 0;
+            return day === 0;  // 0 là Chủ Nhật trong JavaScript
         }
 
+        // Kiểm tra xem ngày có phải là ngày lễ không
         function isHoliday(date) {
-            const dayMonth = date.slice(5);
-            return holidays.includes(dayMonth);
+            // Lấy phần tháng và ngày từ chuỗi ngày (YYYY-MM-DD)
+            const dayMonth = date.slice(5);  // Lấy phần ngày-tháng (MM-DD)
+            return holidays.includes(dayMonth);  // Kiểm tra xem ngày-tháng có trong danh sách lễ không
         }
+
     });
 
-    document.getElementById("doctor").onchange = function() {
+    document.getElementById("doctor").onchange = function()
+     {
         let selector = document.getElementById('doctor');
         let value = selector[selector.selectedIndex].value;
-        for (let i = 0; i < selector.length; i++) {
-            if (selector[i].value == value) {
+        for (let i = 0; i < selector.length; i++)
+         {
+            if (selector[i].value == value)
+            {
                 document.getElementById(selector[i].value).disabled = false;
                 document.getElementById(selector[i].value).hidden = false;
-            } else {
+            }
+            else{
                 document.getElementById(selector[i].value).disabled = true;
                 document.getElementById(selector[i].value).hidden = true;
             }
         }
     }
 </script>
+
 
 </body>
 </html>

@@ -4,87 +4,155 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-    <title>Home</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Danh Sách Sản Phẩm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
+        html, body {
+            height: 100%;
+        }
+
         body {
-            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #ffc107;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .navbar {
+            margin-bottom: 20px;
         }
 
         h1 {
             margin-bottom: 20px;
             font-weight: bold;
             color: #343a40;
-            text-align: center;
         }
 
+        .card {
+            border: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Đảm bảo các nút chat được hiển thị ở góc dưới bên phải */
+        .float-contact {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            z-index: 1000;
+        }
+
+        .float-contact button {
+            margin-bottom: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .float-contact button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .float-contact button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Đảm bảo ảnh banner hiển thị đầy đủ */
+        .banner {
+            width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
-<section layout:fragment="content">
-    <div class="d-flex ">
-        <div class=" col-3 large-3">
-            <div class="d-flex justify-content-center dropdown">
-                <button class="btn btn-secondary dropdown-toggle" style="width: 189.325px" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Chọn danh mục
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" th:href="@{/products/add}">Thêm sản phẩm mới</a></li>
-                    <li><a class="dropdown-item" th:href="@{/home/sorted/asc}">Lọc theo giá tăng dần</a></li>
-                    <li><a class="dropdown-item" th:href="@{/home/sorted/asc}">Lọc theo giá giảm dần</a></li>
-                    <li><a class="dropdown-item" th:href="@{/home/dogFoods}">Sản phẩm cho chó </a></li>
-                </ul>
-            </div>
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MyStore</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/home}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/cart}">Cart</a>
+                </li>
+            </ul>
         </div>
-        <div class="col-7 large-9">
-            <h1 class="text-center">DANH SÁCH SẢN PHẨM</h1>
-            <div class="row card-container">
-                <div class="col-md-3" th:each="product : ${products}">
-                    <div class="card product-card">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a th:href="@{/products/details/{id}(id=${product.id})}" >
-                                <img th:src="@{'/' + ${product.imgUrl}}" alt="Product Image" class="img-fluid" width="160" >
-                            </a>
+    </div>
+</nav>
 
-                        </div>
-                        <div class="card-body d-flex flex-column">
-
-                            <!--                                <h6 class="card-subtitle mb-2 text-muted" th:text="${product.category.name}">Category Name</h6>-->
-                            <p class="card-text" th:text="${product.description}">Product Description</p>
-                            <h5 class="card-title" th:text="${product.name}">Product Name</h5>
-                            <p class="card-text"><strong>Giá:</strong> <span th:text="${#strings.replace(#numbers.formatCurrency(product.price), ',00', '')}">Product Price</span> </p>
-                            <!--                                <p class="card-text"><strong>Số lượng:</strong>-->
-                            <!--                                    <span th:if="${product.inventory > 0}" th:text="${product.inventory}"></span>-->
-                            <!--                                    <span th:if="${product.inventory == 0}">Hết hàng</span>-->
-                            <!--                                </p>-->
-                            <div class="mb-4">
-
-                            </div>
-                            <div class="d-flex justify-content-between mt-auto">
-                                <div sec:authorize="hasAuthority('ADMIN')">
-                                    <a th:href="@{/products/edit/{id}(id=${product.id})}"
-                                       class="btn btn-success btn-sm">Sửa</a>
-                                    <a th:href="@{/products/delete/{id}(id=${product.id})}"
-                                       class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc không?')">Xóa</a>
-                                </div>
-                                <form th:if="${product.inventory > 0}" th:action="@{/cart/add}" method="post">
-                                    <input type="number" name="quantity" min="1" value="1"
-                                           class="form-control d-inline-block" style="width: 70px;">
-                                    <input type="hidden" th:value="${product.id}"
-                                           name="productId"/>
-                                    <button type="submit" class="btn btn-warning btn-sm">Thêm Vào Giỏ</button>
-                                </form>
-                            </div>
+<!-- Content -->
+<main>
+    <section layout:fragment="content">
+        <div class="container">
+            <h1 class="text-center">Danh Sách Sản Phẩm</h1>
+            <div class="d-flex justify-content-center mb-3">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        Chọn danh mục
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                            <a class="dropdown-item" th:href="@{/products/add}">Thêm sản phẩm mới</a>
+                        </li>
+                        <li><a class="dropdown-item" th:href="@{/home/sorted/asc}">Lọc theo giá tăng dần</a></li>
+                        <li><a class="dropdown-item" th:href="@{/home/sorted/desc}">Lọc theo giá giảm dần</a></li>
+                        <li><a class="dropdown-item" th:href="@{/home/dogFoods}">Sản phẩm cho chó</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="product : ${products}">
+                    <div class="card">
+                        <a th:href="@{/products/details/{id}(id=${product.id})}">
+                            <img th:src="@{'/' + ${product.imgUrl}}" alt="Product Image" class="card-img-top">
+                        </a>
+                        <div class="card-body text-center">
+                            <h5 class="card-title" th:text="${product.name}"></h5>
+                            <p class="card-text" th:text="${product.description}"></p>
+                            <p><strong>Giá:</strong> <span th:text="${#numbers.formatCurrency(product.price)}"></span></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+</main>
 
-</section>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script th:src="@{../static/js/jquery.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -66,6 +66,7 @@
     </style>
 </head>
 <body>
+<img src="https://bizweb.dktcdn.net/100/375/956/themes/750643/assets/img_top_banner.jpg?1731149194197" alt="Banner Image" class="banner">
 <!-- Header -->
 <header class="bg-danger text-white">
     <div class="container d-flex align-items-center justify-content-between py-2">
@@ -125,7 +126,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
                     <a id="myOrders" href="#" class="nav-link text-dark">ĐƠN HÀNG</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
                     <a th:href="@{/doctors}" class="nav-link text-dark">QUẢN LÝ BÁC SĨ</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
@@ -134,7 +135,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EMPLOYEE', 'DOCTOR')">
                     <a th:href="@{/homedoctors}" class="nav-link text-dark">BÁC SĨ</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('USER', 'DOCTOR','ADMIN', 'EMPLOYEE')">
                     <a id="profile" th:href="@{/profiles/{username}}" class="nav-link text-dark">HỒ SƠ</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'DOCTOR', 'EMPLOYEE')">
@@ -150,10 +151,22 @@
 <main class="container mt-5">
     <section layout:fragment="content">
         <!-- Nội dung cụ thể của từng trang sẽ được đặt tại đây -->
+
     </section>
+
 </main>
 
-
+<div class="float-contact">
+    <button class="chat-zalo">
+        <a href="https://zalo.me/0359688315" target="_blank"><i class="icon-whatsapp"></i> Chat Zalo</a>
+    </button>
+    <button class="chat-face">
+        <a href="https://m.me/trai.quang.12" target="_blank"><i class="icon-facebook" aria-hidden="true"></i> Chat Facebook</a>
+    </button>
+    <button class="hotline">
+        <a href="tel:0359688315"><i class="icon-phone" aria-hidden="true"></i> Hotline: 0359688315</a>
+    </button>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     window.onload = function () {
@@ -166,6 +179,14 @@
         if (link != null) link.setAttribute("href", "/profile/" + name);
         link = document.getElementById("profile");
         if (link != null) link.setAttribute("href", "/profile/" + name);
+
+        var currentPage = window.location.pathname;
+        if (currentPage !== '/home') {
+            var contactButtons = document.querySelectorAll('.float-contact');
+            contactButtons.forEach(function(button) {
+                button.style.display = 'none';
+            });
+        }
     };
 
 
