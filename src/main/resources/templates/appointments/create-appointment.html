@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      >
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +22,7 @@
 
 <div class="container">
     <h2>Đặt Lịch Khám Thú Y</h2>
+    <button type="button" class="btn btn-info" onclick="window.location.href='/appointments'">Quay lại</button>
     <div id="calendar"></div>
 
     <!-- Form Đặt Lịch -->
@@ -36,47 +36,49 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="appointmentForm">
+                    <form id="appointmentForm" th:action="@{/appointments/create}" th:object="${appointment}" method="post"
+                          class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="customerName">Tên Khách Hàng</label>
-                            <input th:field="*{appointment.customerName}" type="text" id="customerName" class="form-control" required>
+                            <input th:field="*{customerName}" type="text" id="customerName" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="customerEmail">Email</label>
-                            <input th:field="*{appointment.customerEmail}" type="text" id="customerEmail" class="form-control" required>
+                            <input th:field="*{customerEmail}" type="text" id="customerEmail" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="customerPhone">Số Điện Thoại</label>
-                            <input th:field="*{appointment.customerPhone}" type="text" id="customerPhone" class="form-control" required>
+                            <input th:field="*{customerPhone}" type="text" id="customerPhone" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="appointmentDate">Ngày Giờ Khám</label>
-                            <input type="text" id="appointmentDate" class="form-control" readonly>
+                            <label for="apntDate">Ngày Giờ Khám</label>
+                            <input type="text" id="apntDate" name="apntDate" class="form-control" readonly>
                         </div>
                         <div class="form-group">
                             <label for="doctor">Chọn Bác Sĩ</label>
-                            <select th:field="*{appointment.doctor}" class="form-control" id="doctor">
+                            <select th:field="*{doctor}" class="form-control" id="doctor">
                                 <option th:each="doctor : ${doctors}"
                                         th:value="${doctor.id}" th:text="${doctor.name}"></option>
                             </select>
                         </div>
                         <label>Chọn Khung giờ</label>
                         <div th:each="doctor : ${doctors}" class="form-group">
-                            <select  class="form-control" th:id="${doctor.id}" hidden="true">
+                            <select  class="form-control" th:id="${doctor.id}" name="availableTime" disabled="true" hidden="true">
                                 <option th:each=" time : ${doctor.workTime}"
                                         th:value="${time.id}" th:text="${time.StartTime}"></option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="appointmentNote">Ghi chú</label>
-                            <input th:field="*{appointment.note}" type="text" id="appointmentNote" class="form-control" readonly>
+                            <input th:field="*{note}" type="text" id="appointmentNote" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary" >Đặt Lịch</button>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="submitAppointment">Đặt Lịch</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -94,6 +96,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
+        // Danh sách các ngày lễ ở Việt Nam theo định dạng 'MM-DD'
+        const holidays = [
+            '01-01', // Tết Dương Lịch
+            '04-30', // Ngày Giải Phóng Miền Nam
+            '05-01', // Ngày Lao Động
+            '09-02', // Ngày Quốc Khánh
+        ];
+
         // Khởi tạo FullCalendar
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -103,65 +113,66 @@
             dateClick: function(info) {
                 // Khi người dùng click vào một ngày, hiển thị form đặt lịch
                 var selectedDate = info.dateStr;
-                document.getElementById('appointmentDate').value = selectedDate;
-                $('#appointmentModal').modal('show');
+                if (isSunday(selectedDate) || isHoliday(selectedDate)) {
+                    alert("Xin lỗi! bạn hãy chọn ngày khác vì ngày này cửa hàng đóng cửa!");
+                } else {
+                    document.getElementById('apntDate').value = selectedDate;
+                     let selector = document.getElementById('doctor');
+                    let value = selector[selector.selectedIndex].value;
+                    for (let i = 0; i < selector.length; i++)
+                     {
+                        if (selector[i].value == value)
+                        {
+                            document.getElementById(selector[i].value).disabled = false;
+                            document.getElementById(selector[i].value).hidden = false;
+                        }
+                        else{
+                            document.getElementById(selector[i].value).disabled = true;
+                            document.getElementById(selector[i].value).hidden = true;
+                        }
+                    }
+                    $('#appointmentModal').modal('show');
+                }
             }
         });
 
         // Hiển thị lịch
         calendar.render();
 
-        // Xử lý khi người dùng đặt lịch
-        document.getElementById('submitAppointment').addEventListener('click', function() {
-            var customerName = document.getElementById('customerName').value;
-            var customerPhone = document.getElementById('customerPhone').value;
-            var appointmentDate = document.getElementById('appointmentDate').value;
-            var doctor = document.getElementById('doctor').value;
+        // Kiểm tra xem ngày có phải là Chủ Nhật không
+        function isSunday(date) {
+            var day = new Date(date).getDay();
+            return day === 0;  // 0 là Chủ Nhật trong JavaScript
+        }
 
-            if (customerName && customerPhone && appointmentDate) {
-                // Gửi yêu cầu tạo lịch khám đến server (đảm bảo đã cấu hình backend để xử lý)
-                var data = {
-                    customerName: customerName,
-                    customerPhone: customerPhone,
-                    appointmentDate: appointmentDate,
-                    doctorId: doctor
-                };
+        // Kiểm tra xem ngày có phải là ngày lễ không
+        function isHoliday(date) {
+            // Lấy phần tháng và ngày từ chuỗi ngày (YYYY-MM-DD)
+            const dayMonth = date.slice(5);  // Lấy phần ngày-tháng (MM-DD)
+            return holidays.includes(dayMonth);  // Kiểm tra xem ngày-tháng có trong danh sách lễ không
+        }
 
-                // Sử dụng fetch API để gửi yêu cầu POST đến server (ví dụ "/appointments/create")
-                fetch('/appointments/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    // Hiển thị thông báo và đóng modal
-                    alert('Đặt lịch thành công!');
-                    $('#appointmentModal').modal('hide');
-                    // Tải lại lịch để hiển thị sự kiện mới
-                    calendar.refetchEvents();
-                })
-                .catch(error => console.error('Error:', error));
-            } else {
-                alert('Vui lòng điền đầy đủ thông tin!');
-            }
-        });
     });
 
-   document.getElementById("doctor").onchange = function(){
-
-    let selector = document.getElementById('doctor');
-    let value = selector[selector.selectedIndex].value;
-    for(let i=0;i<selector.length;i++){
-        if(selector[i].value==value)
-            document.getElementById(selector[i].value).hidden = false;
-        else
-            document.getElementById(selector[i].value).hidden = true;
-    }
+    document.getElementById("doctor").onchange = function()
+     {
+        let selector = document.getElementById('doctor');
+        let value = selector[selector.selectedIndex].value;
+        for (let i = 0; i < selector.length; i++)
+         {
+            if (selector[i].value == value)
+            {
+                document.getElementById(selector[i].value).disabled = false;
+                document.getElementById(selector[i].value).hidden = false;
+            }
+            else{
+                document.getElementById(selector[i].value).disabled = true;
+                document.getElementById(selector[i].value).hidden = true;
+            }
+        }
     }
 </script>
+
 
 </body>
 </html>
