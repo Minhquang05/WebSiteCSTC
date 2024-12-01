@@ -36,11 +36,25 @@ public class AppointmentController {
         model.addAttribute("doctors", doctorService.getAllDoctors()); // Lấy danh sách bác sĩ thú y
         return "appointments/create-appointment";  // Trang form đặt lịch khám
     }
+
     @PostMapping("/create")
     public String createAppointment(@RequestBody Appointment appointment) {
         appointmentService.createAppointment(appointment);
         return "redirect:/appointments";
     }
+
+//    @GetMapping("/list")
+//    public String listAppointmentForm(Model model) {
+//        model.addAttribute("appointment", new Appointment());
+//        model.addAttribute("doctors", doctorService.getAllDoctors()); // Lấy danh sách bác sĩ thú y
+//        return "appointments/appointment-list";  //
+//    }
+//
+//    @PostMapping("/list")
+//    public String listAppointment(@RequestBody Appointment appointment) {
+//        appointmentService.createAppointment(appointment);
+//        return "redirect:/appointments";
+//    }
 
     // Trang thành công
     @GetMapping("/success")

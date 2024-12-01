@@ -21,7 +21,7 @@
             <div class="d-flex align-items-center">
                 <a sec:authorize="isAuthenticated()" id="myCart" class="nav-link text-white me-4" th:ref="@{/cart/}"><img class="img-fluid" src="../../images/images-removebg-preview.png" width="40"></a>
                 <a sec:authorize="!isAuthenticated()" id="cart" class="nav-link text-white me-4" th:href="@{/cart}"><img class="img-fluid" src="../../images/images-removebg-preview.png" width="40"></a>
-                <span sec:authorize="isAuthenticated()" class="navbar-text text-white">Xin chào,</span>
+                <span sec:authorize="isAuthenticated()" class="navbar-text text-white"></span>
                 <a id="username" sec:authorize="isAuthenticated()"  sec:authentication="name" class="mr-5 nav-link active text-white  me-4" href="#"></a>
                 <form class="mr-2" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
                     <button class="btn btn-outline-light" type="submit">Log Out</button>
