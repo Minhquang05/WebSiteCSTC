@@ -46,7 +46,7 @@
             <tr th:each="product : ${products}">
                 <td style="font-size: 1em;" th:text="${product.id}"></td>
                 <td style="font-size: 1em;" th:text="${product.name}"></td>
-                <td style="font-size: 1em;" th:text="${product.roundPrice()}"></td>
+                <td style="font-size: 1em;" th:text="${#numbers.formatCurrency(product.price)}"></td>
                 <td style="font-size: 1em;" th:text="${product.description}"></td>
                 <td style="font-size: 1em;" th:text="${product.category.name}"></td>
                 <td>

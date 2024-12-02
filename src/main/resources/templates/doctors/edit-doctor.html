@@ -34,6 +34,13 @@
                 <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
             </div>
 
+            <h3>Existing Images:</h3>
+            <div th:each="image, imageIndex : ${doctor.setAvatar(avatarUrl)}">
+                <img th:src="@{'/' + ${image}}" alt="Product Image" width="50" height="50">
+            </div>
+            <h3>New Images:</h3>
+            <input type="file" id="imageFiles" name="imageFiles" multiple accept=".jpg, .jpeg, .png">
+
             <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
             <a href="/doctors" class="btn btn-secondary">Quay Lại</a>
         </form>

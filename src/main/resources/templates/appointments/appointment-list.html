@@ -22,6 +22,7 @@
             <thead class="table-dark">
             <tr>
                 <th>Mã lịch hẹn</th>
+                <th>Tên Khách Hàng</th>
                 <th>Ngày đặt</th>
                 <th>Trạng thái</th>
                 <th>Chức năng</th>
@@ -30,6 +31,7 @@
             <tbody>
             <tr th:each="appointment : ${appointments}">
                 <td style="font-size: 1em;" th:text="${appointment.id}"></td>
+                <td style="font-size: 1em;" th:text="${appointment.customerName}"></td>
                 <td style="font-size: 1em;" th:text="${appointment.appointmentDate}"></td>
                 <td style="font-size: 1em;" th:text="${appointment.appointmentState}"></td>
                 <td>

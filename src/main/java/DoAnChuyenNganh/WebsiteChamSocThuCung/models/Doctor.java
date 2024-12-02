@@ -20,6 +20,10 @@ public class Doctor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(name = "IMAGE")
+    private String imgUrl;
+    @Column(name = "GALLERY")
+    private List<String> productImages;
     private String specialization;
     private String phone;
     private String email;
