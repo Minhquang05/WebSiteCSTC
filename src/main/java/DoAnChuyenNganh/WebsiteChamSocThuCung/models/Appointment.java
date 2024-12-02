@@ -36,6 +36,7 @@ public class Appointment {
     @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
 
+
     // Getters và setters
 
 }
