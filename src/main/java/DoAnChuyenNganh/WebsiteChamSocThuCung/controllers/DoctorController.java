@@ -60,37 +60,37 @@ public class DoctorController {
                                     BindingResult result,
                                     @RequestParam("imageFiles") MultipartFile[] imageFiles,
                                     Model model) {
-        Optional<Doctor> doctor = doctorService.getDoctorById(id);
-        if (doctor.isPresent()) {
-            model.addAttribute("doctor", doctor.get());
-            return "doctors/edit-doctor"; // Trang chỉnh sửa
-        }
-        List<String> imagePaths = new ArrayList<>();
-        if (imageFiles != null && imageFiles.length > 0) {
-            try {
-                File uploadDir = new File("src/main/resources/static/images/");
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                for (MultipartFile imageFile : imageFiles) {
-                    if (!imageFile.isEmpty()) {
-                        String imagePath = "images/" + imageFile.getOriginalFilename();
-                        Files.write(Paths.get("src/main/resources/static/" + imagePath), imageFile.getBytes());
-                        imagePaths.add(imagePath);
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        List<String> existingImages = doctor.getProductImages();
-        if (existingImages != null) {
-            imagePaths.addAll(existingImages);
-        }
-        product.setProductImages(imagePaths);
-        product.setImgUrl(product.getProductImages().getFirst());
-        productService.updateProduct(product);
+//        Optional<Doctor> doctor = doctorService.getDoctorById(id);
+//        if (doctor.isPresent()) {
+//            model.addAttribute("doctor", doctor.get());
+//            return "doctors/edit-doctor"; // Trang chỉnh sửa
+//        }
+//        List<String> imagePaths = new ArrayList<>();
+//        if (imageFiles != null && imageFiles.length > 0) {
+//            try {
+//                File uploadDir = new File("src/main/resources/static/images/");
+//                if (!uploadDir.exists()) {
+//                    uploadDir.mkdirs();
+//                }
+//                for (MultipartFile imageFile : imageFiles) {
+//                    if (!imageFile.isEmpty()) {
+//                        String imagePath = "images/" + imageFile.getOriginalFilename();
+//                        Files.write(Paths.get("src/main/resources/static/" + imagePath), imageFile.getBytes());
+//                        imagePaths.add(imagePath);
+//                    }
+//                }
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//
+//        List<String> existingImages = doctor.getProductImages();
+//        if (existingImages != null) {
+//            imagePaths.addAll(existingImages);
+//        }
+//        product.setProductImages(imagePaths);
+//        product.setImgUrl(product.getProductImages().getFirst());
+//        productService.updateProduct(product);
         return "redirect:/doctors";
     }
 

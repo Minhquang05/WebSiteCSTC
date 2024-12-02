@@ -35,6 +35,19 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "DOCTOR_ID")
     private Doctor doctor;
+    private byte isRemoved;
+
+    public Appointment orElseThrow(Object o) {
+        return null;
+    }
+
+    public void setIsRemoved(byte isRemoved) {
+        this.isRemoved = isRemoved;
+    }
+
+    public byte getIsRemoved() {
+        return isRemoved;
+    }
 
 
     // Getters và setters
