@@ -6,17 +6,15 @@ import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.AppointmentService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.WorkHourService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -69,4 +67,24 @@ public class AppointmentController {
     public String appointmentSuccess() {
         return "appointments/appointment-success";  // Trang thông báo thành công
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            appointmentService.deleteAppointmentById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Appointment deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error deleting appointment. Please try again.");
+        }
+        return "redirect:/appointments";
+    }
+
+
+    @GetMapping("/detail/{id}")
+    public String detailAppointment(@PathVariable Long id, Model model) {
+        Appointment appointment = appointmentService.getAppointmentById(id).orElseThrow( () -> new IllegalArgumentException("Invalid doctor Id:" + id));
+        model.addAttribute("appointment", appointment);
+        return "/appointments/appointment-detail";
+    }
+
 }
