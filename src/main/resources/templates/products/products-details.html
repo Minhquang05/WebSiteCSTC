@@ -114,7 +114,7 @@
                     <p><strong>ID:</strong> <span th:text="${product.id}">ID Sản Phẩm</span></p>
                     <p><strong>Danh Mục:</strong> <span th:text="${product.category.name}">Tên Danh Mục</span></p>
                     <p><strong>Mô Tả:</strong> <span th:text="${product.description}">Mô Tả Sản Phẩm</span></p>
-                    <p><strong>Giá:</strong> <span th:text="${product.price}">Giá Sản Phẩm</span> VND</p>
+                    <p><strong>Giá:</strong> <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span> &#8363</p>
                     <p><strong>Số lượng:</strong>
                         <span th:if="${product.inventory > 0}" th:text="${product.inventory}">Số lượng</span>
                         <span th:if="${product.inventory == 0}">Hết hàng</span>

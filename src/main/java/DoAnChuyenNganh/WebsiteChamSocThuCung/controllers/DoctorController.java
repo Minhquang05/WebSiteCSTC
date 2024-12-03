@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.Doc;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -56,42 +57,12 @@ public class DoctorController {
 
     // Hiển thị form chỉnh sửa thông tin bác sĩ
     @GetMapping("/edit/{id}")
-    public String getEditDoctorPage(@PathVariable Long id, @Valid Doctor doctor,
-                                    BindingResult result,
-                                    @RequestParam("imageFiles") MultipartFile[] imageFiles,
-                                    Model model) {
-        Optional<Doctor> doctor = doctorService.getDoctorById(id);
-        if (doctor.isPresent()) {
-            model.addAttribute("doctor", doctor.get());
-            return "doctors/edit-doctor"; // Trang chỉnh sửa
-        }
-        List<String> imagePaths = new ArrayList<>();
-        if (imageFiles != null && imageFiles.length > 0) {
-            try {
-                File uploadDir = new File("src/main/resources/static/images/");
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                for (MultipartFile imageFile : imageFiles) {
-                    if (!imageFile.isEmpty()) {
-                        String imagePath = "images/" + imageFile.getOriginalFilename();
-                        Files.write(Paths.get("src/main/resources/static/" + imagePath), imageFile.getBytes());
-                        imagePaths.add(imagePath);
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        List<String> existingImages = doctor.getProductImages();
-        if (existingImages != null) {
-            imagePaths.addAll(existingImages);
-        }
-        product.setProductImages(imagePaths);
-        product.setImgUrl(product.getProductImages().getFirst());
-        productService.updateProduct(product);
-        return "redirect:/doctors";
+    public String getEditDoctorPage(@PathVariable Long id, Model model) {
+        Doctor doctor = doctorService.getDoctorById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor id:"+id));
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("workHour", workHourService.getAllWorkHour());
+        return "/doctors/update-doctor";
     }
 
     // Xử lý cập nhật thông tin bác sĩ

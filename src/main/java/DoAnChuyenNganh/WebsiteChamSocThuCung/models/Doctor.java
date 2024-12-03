@@ -23,7 +23,7 @@ public class Doctor {
     @Column(name = "IMAGE")
     private String imgUrl;
     @Column(name = "GALLERY")
-    private List<String> productImages;
+    private List<String> doctorImages;
     private String specialization;
     private String phone;
     private String email;
