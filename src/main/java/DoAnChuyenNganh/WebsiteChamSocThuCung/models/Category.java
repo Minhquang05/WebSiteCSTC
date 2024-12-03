@@ -17,5 +17,5 @@ public class Category {
     @NotBlank(message = "Tên là bắt buộc")
     private String name;
     @Column(name = "IS_REMOVED")
-    private byte isRemoved;
+    private int isRemoved;
 }

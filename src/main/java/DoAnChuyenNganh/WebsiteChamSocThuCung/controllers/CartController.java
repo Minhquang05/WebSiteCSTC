@@ -46,7 +46,7 @@ public class CartController {
     public String addToCart(@RequestParam Long productId, @RequestParam int
             quantity) {
         cartService.addToCart(productId, quantity);
-        return "redirect:/home";
+        return "redirect:/cart";
     }
     @GetMapping("/remove/{productId}")
     public String removeFromCart(@PathVariable Long productId) {

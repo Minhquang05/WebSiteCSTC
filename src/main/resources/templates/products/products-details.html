@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
-    <title>Chi Tiết Sản Phẩm</title>
+    <title th:text="${product.name} ?: 'Product Details'">Product Details</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             padding-top: 20px;
@@ -91,38 +94,49 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="product-details-container">
-        <div class="product-image-section">
-            <div><img th:src="@{'/' + ${product.imgUrl}}" alt="Front Image" width="250" height="250"></div>
-            <div class="product-gallery">
-                <th:block th:each="image : ${product.productImages}">
-                    <img th:src="@{'/' + ${image}}" alt="Ảnh Sản Phẩm">
-                </th:block>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">CHI TIẾT SẢN PHẨM</h2>
+
+        <div class="product-details-container">
+            <div class="product-image-section">
+                <div><img th:src="@{'/' + ${product.imgUrl}}" alt="Product Image" class="product-avatar"></div>
+                <div class="product-gallery">
+                    <th:block th:each="image : ${product.productImages}">
+                        <img th:src="@{'/' + ${image}}" alt="Product Gallery Image">
+                    </th:block>
+                </div>
             </div>
-        </div>
-        <div class="product-info-section">
-            <div class="product-info">
-                <h1 th:text="${product.name}">Tên Sản Phẩm</h1>
-                <p><strong>ID:</strong> <span th:text="${product.id}">ID Sản Phẩm</span></p>
-                <p><strong>Danh Mục:</strong> <span th:text="${product.category.name}">Tên Danh Mục</span></p>
-                <p><strong>Mô Tả:</strong> <span th:text="${product.description}">Mô Tả Sản Phẩm</span></p>
-                <p><strong>Giá:</strong> <span th:text="${product.price}">Giá Sản Phẩm</span> VND</p>
-                <p><strong>Số lượng:</strong>
-                    <span th:if="${product.inventory > 0}" th:text="${product.inventory}">Số lượng</span>
-                    <span th:if="${product.inventory == 0}">Hết hàng</span>
-                </p>
-                <div th:if="${product.inventory > 0}">
-                    <form th:action="@{/cart/add}" method="post">
-                        <input type="number" name="quantity" min="1" th:max="${product.inventory}" value="1" class="form-control d-inline-block" style="width: 70px; margin-right: 10px;">
-                        <input type="hidden" th:value="${product.id}" name="productId"/>
-                        <button class="btn btn-add-cart btn-sm"><i class="fas fa-cart-plus"></i> Thêm vào Giỏ</button>
-                    </form>
+
+            <div class="product-info-section">
+                <div class="product-info">
+                    <h1 th:text="${product.name}">Tên Sản Phẩm</h1>
+                    <p><strong>ID:</strong> <span th:text="${product.id}">ID Sản Phẩm</span></p>
+                    <p><strong>Danh Mục:</strong> <span th:text="${product.category.name}">Tên Danh Mục</span></p>
+                    <p><strong>Mô Tả:</strong> <span th:text="${product.description}">Mô Tả Sản Phẩm</span></p>
+                    <p><strong>Giá:</strong> <span th:text="${product.price}">Giá Sản Phẩm</span> VND</p>
+                    <p><strong>Số lượng:</strong>
+                        <span th:if="${product.inventory > 0}" th:text="${product.inventory}">Số lượng</span>
+                        <span th:if="${product.inventory == 0}">Hết hàng</span>
+                    </p>
+
+                    <div th:if="${product.inventory > 0}">
+                        <form th:action="@{/cart/add}" method="post">
+                            <input type="number" name="quantity" min="1" th:max="${product.inventory}" value="1" class="form-control d-inline-block" style="width: 70px; margin-right: 10px;">
+                            <input type="hidden" th:value="${product.id}" name="productId"/>
+                            <button class="btn btn-add-cart btn-sm"><i class="fas fa-cart-plus"></i> Thêm vào Giỏ</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="mt-4">
+            <a th:href="@{/products}" class="btn btn-secondary">Quay lại danh sách sản phẩm</a>
+        </div>
     </div>
-</div>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

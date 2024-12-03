@@ -37,7 +37,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="appointmentForm" th:action="@{/appointments/create}" th:object="${appointment}" method="post"
-                          class="needs-validation" novalidate>
+                                class="needs-validation" novalidate>
                         <div class="form-group">
                             <label for="customerName">Tên Khách Hàng</label>
                             <input th:field="*{customerName}" type="text" id="customerName" class="form-control" required>

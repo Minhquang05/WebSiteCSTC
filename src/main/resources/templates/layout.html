@@ -4,117 +4,192 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>Layout</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Care</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+
+
+        /* Header */
+        .header-top {
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+        }
+
+        .header-top img {
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .header-top img:hover {
+            transform: scale(1.1);
+        }
+
+        .navbar-nav .nav-link {
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            border-radius: 5px;
+        }
+
+        .navbar {
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Button styles */
+        .btn-outline-light:hover {
+            background-color: #ffffff;
+            color: #0d6efd;
+        }
+    </style>
 </head>
 <body>
-    <div class="bg-primary ">
-        <div class="d-flex header-top align-items-center justify-content-evenly">
-            <a class="text-white" href="/"><img class="img-fluid" src="../../images/logochamsocthucung.jpg" alt="" width="80" height="80"></a>
-            <div>
-                <form action="/home" method="get" class="d-flex">
-                    <input type="text" id="searchInput" name="keyword" class="form-control me-2" placeholder="Tìm Sản phẩm" style="width:400px">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-            </div>
-            <div class="d-flex align-items-center">
-                <a sec:authorize="isAuthenticated()" id="myCart" class="nav-link text-white me-4" th:ref="@{/cart/}"><img class="img-fluid" src="../../images/images-removebg-preview.png" width="40"></a>
-                <a sec:authorize="!isAuthenticated()" id="cart" class="nav-link text-white me-4" th:href="@{/cart}"><img class="img-fluid" src="../../images/images-removebg-preview.png" width="40"></a>
-                <span sec:authorize="isAuthenticated()" class="navbar-text text-white">Xin chào,</span>
-                <a id="username" sec:authorize="isAuthenticated()"  sec:authentication="name" class="mr-5 nav-link active text-white  me-4" href="#"></a>
-                <form class="mr-2" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
-                    <button class="btn btn-outline-light" type="submit">Log Out</button>
-                </form>
-                <a sec:authorize="!isAuthenticated()" class="btn btn-outline-light me-4" href="/login">Login</a>
-            </div>
+<img src="https://bizweb.dktcdn.net/100/375/956/themes/750643/assets/img_top_banner.jpg?1731149194197" alt="Banner Image" class="banner">
+<!-- Header -->
+<header class="bg-danger text-white">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+        <a href="/" class="d-flex align-items-center text-white text-decoration-none">
+            <img src="../../images/anhpet.jpg" alt="Logo" class="rounded-circle" width="60" height="60">
+            <span class="ms-2 fs-4">Pet Care</span>
+        </a>
+
+        <!-- Search Bar -->
+        <form action="/home" method="get" class="d-flex w-50">
+            <input type="text" id="searchInput" name="keyword" class="form-control me-2" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+            <button type="submit" class="btn btn-light">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+
+        <!-- User Section -->
+        <div class="d-flex align-items-center">
+            <a sec:authorize="isAuthenticated()" id="myCart" class="text-white me-4" th:href="@{/cart/}">
+                <i class="fas fa-shopping-cart fs-4"></i>
+            </a>
+            <a sec:authorize="!isAuthenticated()" id="cart" class="text-white me-4" th:href="@{/cart}">
+                <i class="fas fa-shopping-cart fs-4"></i>
+            </a>
+            <span sec:authorize="isAuthenticated()" class="navbar-text text-white"></span>
+            <a id="username" sec:authorize="isAuthenticated()" sec:authentication="name" class="mr-5 nav-link active text-white me-4" href="#"></a>
+            <form class="mr-2" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <button class="btn btn-outline-light" type="submit">Đăng xuất</button>
+            </form>
+            <a sec:authorize="!isAuthenticated()" class="btn btn-outline-light me-4" href="/login">Đăng nhập</a>
         </div>
-
-        <div class="w-100">
-            <nav class="navbar navbar-expand-lg navbar-light bg-transparent mt-2"
-                 style="height:80px">
-                <div class="container-fluid">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
-                                <a class="nav-link text-white active" aria-current="page"
-                                   href="/products">SẢN PHẨM</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
-                                <a th:href="@{/categories}" class="nav-link text-white">MỤC SẢN PHẨM</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
-                                <a th:href="@{/employees}" class="nav-link text-white">NHÂN VIÊN</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN','EMPLOYEE')">
-                                <a th:href="@{/order/employee}" class="nav-link text-white">ĐƠN HÀNG</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
-                                <a id="myOrders" href="#" class="nav-link text-white">ĐƠN HÀNG</a>
-                            </li>
-
-                            <!-- Thêm phần Bác sĩ -->
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')">
-                                <a th:href="@{/doctors}" class="nav-link text-white">QUẢN LÝ BÁC SĨ</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
-                                <a th:href="@{/workHour}" class="nav-link text-white">QUẢN LÝ KHUNG GIỜ</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER','EMPLOYEE','DOCTOR')">
-                                <a th:href="@{/homedoctors}" class="nav-link text-white">BÁC SĨ</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
-                                <a id="profile" th:href="@{/profiles/{username}}" class="nav-link text-white">HO SO</a>
-                            </li>
-
-                            <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'DOCTOR')">
-                                <a th:href="@{/appointments}" class="nav-link text-white">LỊCH KHÁM</a>
-                            </li>
-                        </ul>
-
-                    </div>
-                </div>
-            </nav>
-
-        </div>
-
-
     </div>
-<div class=" mt-5 ml-0">
+</header>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-transparent mt-2">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar content (collapse menu) -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav d-flex justify-content-evenly w-100">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a class="nav-link text-dark active" href="/products">SẢN PHẨM</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a th:href="@{/categories}" class="nav-link text-dark">MỤC SẢN PHẨM</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a th:href="@{/employees}" class="nav-link text-dark">NHÂN VIÊN</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'EMPLOYEE')">
+                    <a th:href="@{/order/employee}" class="nav-link text-dark">ĐƠN HÀNG</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
+                    <a id="myOrders" href="#" class="nav-link text-dark">ĐƠN HÀNG</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a th:href="@{/doctors}" class="nav-link text-dark">QUẢN LÝ BÁC SĨ</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                    <a th:href="@{/workHour}" class="nav-link text-dark">QUẢN LÝ KHUNG GIỜ</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EMPLOYEE', 'DOCTOR')">
+                    <a th:href="@{/homedoctors}" class="nav-link text-dark">BÁC SĨ</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('USER', 'DOCTOR','ADMIN', 'EMPLOYEE')">
+                    <a id="profile" th:href="@{/profiles/{username}}" class="nav-link text-dark">HỒ SƠ</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'DOCTOR', 'EMPLOYEE')">
+                    <a th:href="@{/appointments}" class="nav-link text-dark">LỊCH KHÁM</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<!-- Main Content -->
+<main class="container mt-5">
     <section layout:fragment="content">
         <!-- Nội dung cụ thể của từng trang sẽ được đặt tại đây -->
+
     </section>
+
+</main>
+
+<div class="float-contact">
+    <button class="chat-zalo">
+        <a href="https://zalo.me/0359688315" target="_blank"><i class="icon-whatsapp"></i> Chat Zalo</a>
+    </button>
+    <button class="chat-face">
+        <a href="https://m.me/trai.quang.12" target="_blank"><i class="icon-facebook" aria-hidden="true"></i> Chat Facebook</a>
+    </button>
+    <button class="hotline">
+        <a href="tel:0359688315"><i class="icon-phone" aria-hidden="true"></i> Hotline: 0359688315</a>
+    </button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    window.onload = function() {
+    window.onload = function () {
         var name = document.getElementById("username").innerHTML;
         var link = document.getElementById("myOrders");
-        if(link!=null)
-            link.setAttribute("href", "/order/"+name);
+        if (link != null) link.setAttribute("href", "/order/" + name);
         link = document.getElementById("myCart");
-        if(link!=null)
-             link.setAttribute("href", "/cart/"+name);
+        if (link != null) link.setAttribute("href", "/cart/" + name);
         link = document.getElementById("username");
-        if(link!=null)
-             link.setAttribute("href", "/profile/"+name);
+        if (link != null) link.setAttribute("href", "/profile/" + name);
         link = document.getElementById("profile");
-        if(link!=null)
-             link.setAttribute("href", "/profile/"+name);
+        if (link != null) link.setAttribute("href", "/profile/" + name);
+
+        var currentPage = window.location.pathname;
+        if (currentPage !== '/home') {
+            var contactButtons = document.querySelectorAll('.float-contact');
+            contactButtons.forEach(function(button) {
+                button.style.display = 'none';
+            });
+        }
     };
+
+
 </script>
 </body>
 </html>
