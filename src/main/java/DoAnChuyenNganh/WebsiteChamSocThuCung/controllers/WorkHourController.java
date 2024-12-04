@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -27,11 +28,17 @@ public class WorkHourController {
     }
 
     @PostMapping("/workHour/add")
-    public String addWorkHour(@Valid WorkHour workHour, BindingResult result) {
+    public String addWorkHour(@Valid WorkHour workHour, BindingResult result, @RequestParam("time") List<String> timeList) {
         if (result.hasErrors()) {
             return "/workHour/add-workHour";
         }
-        workHourService.saveWorkHour(workHour);
+        for(int i=0;i<timeList.size();i++)
+        {
+            workHour.setStartTime(timeList.get(i));
+            workHourService.saveWorkHour(workHour);
+        }
+
+
         return "redirect:/workHour";
     }
 
