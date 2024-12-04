@@ -38,13 +38,13 @@
                 <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
             </div>
 
-            <div class="form-group">
-                <label for="workTime" class="form-label">Giờ làm:</label>
-                <select th:field="*{workTime}" class="form-control" id="workTime" multiple>
-                    <option th:each="workhour : ${workhours}"
-                            th:value="${workhour.id}" th:text="${workhour.StartTime}"></option>
-                    </select>
-            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="workTime" class="form-label">Giờ làm:</label>-->
+<!--                <select th:field="*{workTime}" class="form-control" id="workTime" multiple>-->
+<!--                    <option th:each="workhour : ${workhours}"-->
+<!--                            th:value="${workhour.id}" th:text="${workhour.StartTime}"></option>-->
+<!--                    </select>-->
+<!--            </div>-->
 
             <div class="form-group">
                 <label for="avatar">Ảnh đại diện:</label>
