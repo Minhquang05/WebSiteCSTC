@@ -38,5 +38,8 @@ public class Doctor {
     private Set<WorkHour> workTime = new HashSet<>();
     @OneToMany(mappedBy = "doctor")
     private Set<Appointment> appointments = new HashSet<>();
+
+    public void setWorkTime(Set<WorkHour> workHours) {
+    }
     // Getters and Setters
 }

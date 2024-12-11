@@ -79,7 +79,7 @@ public class DoctorController {
     @PostMapping("/edit/{id}")
     public String updateDoctor(@PathVariable Long id,
                                @ModelAttribute Doctor updatedDoctor,
-                               @RequestParam("avatar") MultipartFile avatar) {
+                               @RequestParam("avatar") File avatar) {
         Optional<Doctor> existingDoctor = doctorService.getDoctorById(id);
         if (existingDoctor.isPresent()) {
             Doctor doctor = existingDoctor.get();
@@ -89,18 +89,17 @@ public class DoctorController {
             doctor.setEmail(updatedDoctor.getEmail());
 
             // Kiểm tra nếu có ảnh mới, tải lên và lưu vào thư mục
-            if (!avatar.isEmpty()) {
+            if (avatar!=null) {
                 try {
                     // Lưu ảnh vào thư mục tĩnh
-                    String avatarFilename = avatar.getOriginalFilename();
-                    File file = new File("src/main/resources/static/images/" + avatarFilename);
-                    avatar.transferTo(file);  // Lưu ảnh vào thư mục
-                    doctor.setAvatar(avatarFilename);  // Cập nhật avatar vào đối tượng bác sĩ
-                } catch (IOException e) {
+//                    String avatarFilename = avatar.getOriginalFilename();
+//                    File file = new File("src/main/resources/static/images/" + avatarFilename);
+//                    avatar.transferTo(file);  // Lưu ảnh vào thư mục
+                    doctor.setAvatar(avatar.getPath());  // Cập nhật avatar vào đối tượng bác sĩ
+                } catch (Exception e) {
                     e.printStackTrace();  // Nếu có lỗi trong việc tải ảnh
                 }
             }
-
             doctorService.saveDoctor(doctor);  // Lưu bác sĩ vào cơ sở dữ liệu
         }
         return "redirect:/doctors";  // Sau khi cập nhật xong, chuyển về trang danh sách bác sĩ

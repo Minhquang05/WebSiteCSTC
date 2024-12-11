@@ -21,11 +21,11 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-    // Lấy chi tiết lịch hẹn theo ID
-    public Appointment getAppointmentById(Long id) {
-        return appointmentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Appointment with ID " + id + " does not exist."));
-    }
+//    // Lấy chi tiết lịch hẹn theo ID
+//    public Appointment getAppointmentById(Long id) {
+//        return appointmentRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Appointment with ID " + id + " does not exist."));
+//    }
 
     // Tạo mới lịch hẹn
     public Appointment createAppointment(Appointment appointment) {
