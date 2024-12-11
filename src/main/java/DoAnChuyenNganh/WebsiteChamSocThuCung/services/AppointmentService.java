@@ -1,7 +1,6 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.services;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.repositories.AppointmentRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotNull;
@@ -17,19 +16,26 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    public List<Appointment> getAllAppointment(){
+    // Lấy tất cả lịch hẹn
+    public List<Appointment> getAllAppointment() {
         return appointmentRepository.findAll();
     }
 
+//    // Lấy chi tiết lịch hẹn theo ID
+//    public Appointment getAppointmentById(Long id) {
+//        return appointmentRepository.findById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Appointment with ID " + id + " does not exist."));
+//    }
+
+    // Tạo mới lịch hẹn
     public Appointment createAppointment(Appointment appointment) {
-        appointmentRepository.save(appointment);
-        return appointment;
+        return appointmentRepository.save(appointment);
     }
 
-    public Appointment updateAppointmentState(@NotNull Appointment appointment) {
+    // Cập nhật trạng thái lịch hẹn
+    public Appointment updateAppointmentState(Appointment appointment) {
         Appointment existingAppointment = appointmentRepository.findById(appointment.getId())
-                .orElseThrow(() -> new IllegalStateException("Appointment with ID " +
-                        appointment.getId() + " does not exist."));
+                .orElseThrow(() -> new IllegalStateException("Appointment with ID " + appointment.getId() + " does not exist."));
         existingAppointment.setAppointmentState(appointment.getAppointmentState());
         return appointmentRepository.save(existingAppointment);
     }

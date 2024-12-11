@@ -18,9 +18,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/doctors")
@@ -50,24 +49,36 @@ public class DoctorController {
 
     // Xử lý lưu thông tin bác sĩ mới
     @PostMapping("/add")
-    public String createDoctor(@ModelAttribute Doctor doctor) {
+    public String createDoctor(@ModelAttribute @Valid Doctor doctor,
+                               @RequestParam List<Long> workTimes) {
+        Set<WorkHour> workHours = workTimes.stream()
+                .map(workHourService::getWorkHourById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+        doctor.setWorkTime(workHours);
         doctorService.saveDoctor(doctor);
         return "redirect:/doctors";
     }
+
+
 
     // Hiển thị form chỉnh sửa thông tin bác sĩ
     @GetMapping("/edit/{id}")
     public String getEditDoctorPage(@PathVariable Long id, Model model) {
         Doctor doctor = doctorService.getDoctorById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor id:"+id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor id:" + id));
         model.addAttribute("doctor", doctor);
-        model.addAttribute("workHour", workHourService.getAllWorkHour());
-        return "/doctors/update-doctor";
+        model.addAttribute("workhours", workHourService.getAllWorkHour());  // Truyền danh sách giờ làm việc vào model
+        return "/doctors/edit-doctor";
     }
+
 
     // Xử lý cập nhật thông tin bác sĩ
     @PostMapping("/edit/{id}")
-    public String updateDoctor(@PathVariable Long id, @ModelAttribute Doctor updatedDoctor) {
+    public String updateDoctor(@PathVariable Long id,
+                               @ModelAttribute Doctor updatedDoctor,
+                               @RequestParam("avatar") File avatar) {
         Optional<Doctor> existingDoctor = doctorService.getDoctorById(id);
         if (existingDoctor.isPresent()) {
             Doctor doctor = existingDoctor.get();
@@ -75,10 +86,26 @@ public class DoctorController {
             doctor.setSpecialization(updatedDoctor.getSpecialization());
             doctor.setPhone(updatedDoctor.getPhone());
             doctor.setEmail(updatedDoctor.getEmail());
-            doctorService.saveDoctor(doctor);
+
+            // Kiểm tra nếu có ảnh mới, tải lên và lưu vào thư mục
+            if (avatar!=null) {
+                try {
+                    // Lưu ảnh vào thư mục tĩnh
+//                    String avatarFilename = avatar.getOriginalFilename();
+//                    File file = new File("src/main/resources/static/images/" + avatarFilename);
+//                    avatar.transferTo(file);  // Lưu ảnh vào thư mục
+                    doctor.setAvatar(avatar.getPath());  // Cập nhật avatar vào đối tượng bác sĩ
+                } catch (Exception e) {
+                    e.printStackTrace();  // Nếu có lỗi trong việc tải ảnh
+                }
+            }
+            doctorService.saveDoctor(doctor);  // Lưu bác sĩ vào cơ sở dữ liệu
         }
-        return "redirect:/doctors"; // Sau khi cập nhật xong, chuyển về trang danh sách
+        return "redirect:/doctors";  // Sau khi cập nhật xong, chuyển về trang danh sách bác sĩ
     }
+
+
+
 
     // Hiển thị trang xác nhận xóa bác sĩ
     @GetMapping("/delete/{id}")
@@ -122,5 +149,6 @@ public class DoctorController {
         doctorService.saveDoctor(doctor);
         return "redirect:/doctors";
     }
+
 
 }

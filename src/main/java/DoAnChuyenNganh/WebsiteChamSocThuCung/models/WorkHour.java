@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
@@ -24,8 +22,8 @@ public class WorkHour {
     @Column(name = "START_TIME")
     private String StartTime;
 
-    @ManyToMany(mappedBy = "workTime")
-    List<Doctor> doctors;
+    @ManyToMany(mappedBy = "workTime", cascade = CascadeType.ALL)
+    private Set<Doctor> doctors = new HashSet<>();
 //    @OneToMany(mappedBy = "WorkHour")
 //    private List<WorkHourDetail>  workHourDetail;
 }

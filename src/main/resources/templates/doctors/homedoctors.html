@@ -44,7 +44,7 @@
                 <div class="card doctor-card">
                     <div class="card-body d-flex flex-column">
                         <div class="d-flex justify-content-center align-items-center">
-                            <a th:href="@{/doctors/details/{id}(id=${doctor.id})}" >
+                            <a th:href="@{/doctors/detail/{id}(id=${doctor.id})}" >
                                 <img th:src="@{'/images/' + ${doctor.avatar}}" alt="Doctor Images" class="img-fluid" width="160" >
                             </a>
 

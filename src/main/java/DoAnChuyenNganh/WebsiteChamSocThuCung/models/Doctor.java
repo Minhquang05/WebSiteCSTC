@@ -1,3 +1,4 @@
+
 package DoAnChuyenNganh.WebsiteChamSocThuCung.models;
 
 import jakarta.persistence.*;
@@ -34,11 +35,11 @@ public class Doctor {
             joinColumns = @JoinColumn(name = "doctor_id"),
             inverseJoinColumns = @JoinColumn(name = "WorkHour_id")
     )
-    List<WorkHour> workTime;
+    private Set<WorkHour> workTime = new HashSet<>();
     @OneToMany(mappedBy = "doctor")
     private Set<Appointment> appointments = new HashSet<>();
+
+    public void setWorkTime(Set<WorkHour> workHours) {
+    }
     // Getters and Setters
-
-
 }
-

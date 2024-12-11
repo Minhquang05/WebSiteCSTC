@@ -40,11 +40,30 @@
 
             <div class="form-group">
                 <label for="workTime" class="form-label">Giờ làm:</label>
-                <select th:field="*{workTime}" class="form-control" id="workTime" multiple>
-                    <option th:each="workhour : ${workhours}"
-                            th:value="${workhour.id}" th:text="${workhour.StartTime}"></option>
-                    </select>
+                <div id="workTime" class="btn-group-toggle" data-toggle="buttons">
+                    <label th:each="workhour : ${workhours}" class="btn btn-outline-primary">
+                        <input type="checkbox" name="workTimes" th:value="${workhour.id}" autocomplete="off">
+                        <span th:text="${workhour.StartTime}"></span>
+                    </label>
+                </div>
             </div>
+
+
+            <script>
+                function toggleSelection(button) {
+                    button.classList.toggle('active');
+                    // Tạo danh sách ID giờ làm việc từ các button đã chọn
+                    const selectedIds = [];
+                    const workTimeInput = document.getElementById("workTimeInput");
+
+                    const buttons = document.querySelectorAll("#workTime .button.active");
+                    buttons.forEach(button => {
+                        if (button.classList.contains("btn-primary")) {
+                            selectedIds.push(button.getAttribute("data-id"));
+                        }
+                    });
+                }
+            </script>
 
             <div class="form-group">
                 <label for="avatar">Ảnh đại diện:</label>
@@ -72,10 +91,16 @@
                         event.preventDefault();
                         event.stopPropagation();
                     }
+
                     form.classList.add('was-validated');
-                }, false);
+
+                    }
+                    let list = document.getElementByName("wordTimeList");
+                    list.innerHtml = checkboxesChecked;
+                , false);
             });
         }, false);
     })();
+
 </script>
 </html>

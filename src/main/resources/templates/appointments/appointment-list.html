@@ -35,14 +35,11 @@
                 <td style="font-size: 1em;" th:text="${appointment.appointmentDate}"></td>
                 <td style="font-size: 1em;" th:text="${appointment.appointmentState}"></td>
                 <td>
-                    <a style="width:100px; height:30px;"
-                       th:href="@{/appointments/detail/{id}(id=${appointment.id})}"
-                       class="btn btn-info btn-sm">
-                        Chi tiết
-                    </a>
-                    <a style="width:100px ; height:30px" th:href="@{/appointments/delete/{id}(id=${appointment.id})}" class="btn btn-danger btn-sm"onclick="return confirm('Are you sure?')">Hủy</a>
+                    <a style="width:100px; height:30px" th:href="@{/appointments/detail/{id}(id=${appointment.id})}" class="btn btn-warning btn-sm">Chi tiết</a>
 
+                    <a style="width:100px; height:30px" th:href="@{#}" class="btn btn-info btn-sm">Hủy</a>
                 </td>
+
             </tr>
             </tbody>
         </table>

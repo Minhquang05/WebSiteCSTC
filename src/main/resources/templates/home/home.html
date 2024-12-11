@@ -120,21 +120,9 @@
     <section layout:fragment="content">
         <div class="container">
             <h1 class="text-center">Danh Sách Sản Phẩm</h1>
+
             <div class="d-flex justify-content-center mb-3">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        Chọn danh mục
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
-                            <a class="dropdown-item" th:href="@{/products/add}">Thêm sản phẩm mới</a>
-                        </li>
-                        <li><a class="dropdown-item" th:href="@{/home/sorted/asc}">Lọc theo giá tăng dần</a></li>
-                        <li><a class="dropdown-item" th:href="@{/home/sorted/desc}">Lọc theo giá giảm dần</a></li>
-                        <li><a class="dropdown-item" th:href="@{/home/dogFoods}">Sản phẩm cho chó</a></li>
-                    </ul>
-                </div>
+
             </div>
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 mb-4" th:each="product : ${products}">
