@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,11 +51,17 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/profile/{name}")
-    public String showUserProfile(@PathVariable String name, Model model){
-        User user = userService.findByUsername(name)
-                .orElseThrow(() -> new IllegalArgumentException("Can't find this username: " + name));
-        model.addAttribute("user", user);
-        return "/users/profile";
+    @GetMapping("/profile/{username}")
+    public String showUserProfile(@PathVariable String username, Model model) {
+        try {
+            User user = userService.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng: " + username));
+            model.addAttribute("user", user);
+            return "users/profile";
+        } catch (UsernameNotFoundException e) {
+            // Xử lý khi không tìm thấy user
+            model.addAttribute("error", e.getMessage());
+            return "error"; // Tạo trang error.html để hiển thị lỗi
+        }
     }
 }

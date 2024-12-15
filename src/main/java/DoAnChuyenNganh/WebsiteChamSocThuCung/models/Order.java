@@ -17,8 +17,8 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-        @Column(name = "CUSTOMER_NAME")
-        private String customerName;
+    @Column(name = "CUSTOMER_NAME")
+    private String customerName;
     @Column(name = "ADDRESS")
     private String address;
     @Column(name = "PHONE_NUMBER")

@@ -1,63 +1,124 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.services;
 
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
-import DoAnChuyenNganh.WebsiteChamSocThuCung.repositories.AppointmentRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 import java.util.Optional;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.repositories.AppointmentRepository;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AppointmentService {
+    private final AppointmentRepository appointmentRepository;
+    private final DoctorService doctorService;
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-
-    // Lấy tất cả lịch hẹn
-    public List<Appointment> getAllAppointment() {
+    // Lấy tất cả các cuộc hẹn
+    @Transactional(readOnly = true)
+    public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
     }
 
-//    // Lấy chi tiết lịch hẹn theo ID
-//    public Appointment getAppointmentById(Long id) {
-//        return appointmentRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Appointment with ID " + id + " does not exist."));
-//    }
-
-    // Tạo mới lịch hẹn
-    public Appointment createAppointment(Appointment appointment) {
-        return appointmentRepository.save(appointment);
-    }
-
-    // Cập nhật trạng thái lịch hẹn
-    public Appointment updateAppointmentState(Appointment appointment) {
-        Appointment existingAppointment = appointmentRepository.findById(appointment.getId())
-                .orElseThrow(() -> new IllegalStateException("Appointment with ID " + appointment.getId() + " does not exist."));
-        existingAppointment.setAppointmentState(appointment.getAppointmentState());
-        return appointmentRepository.save(existingAppointment);
-    }
-
-
+    // Lấy cuộc hẹn theo ID
+    @Transactional(readOnly = true)
     public Optional<Appointment> getAppointmentById(Long id) {
         return appointmentRepository.findById(id);
     }
 
-    public void updateAppointmentState(Long id) {
-        Appointment existingAppointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("Appointment with ID " +
-                        id + " does not exist."));
-        existingAppointment.setIsRemoved(Byte.parseByte("1"));
-        appointmentRepository.save(existingAppointment);
+    // Lấy các khung giờ trống
+    @Transactional(readOnly = true)
+    public List<LocalTime> getAvailableTimeSlots(Long doctorId, LocalDate date) {
+        Doctor doctor = doctorService.getDoctorById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy bác sĩ"));
+
+        // Lấy các giờ làm việc của bác sĩ
+        List<LocalTime> workHourTimes = doctor.getWorkHours().stream()
+                .map(workHour -> LocalTime.parse(workHour.getStartTime())) // Đảm bảo startTime là định dạng "HH:mm"
+                .collect(Collectors.toList());
+
+        // Lấy các giờ đã được đặt
+        List<LocalTime> bookedTimes = appointmentRepository
+                .findByDoctorAndAppointmentDate(doctor, date)
+                .stream()
+                .map(Appointment::getAppointmentTime)
+                .collect(Collectors.toList());
+
+        // Lọc ra các giờ trống
+        return workHourTimes.stream()
+                .filter(time -> !bookedTimes.contains(time))
+                .collect(Collectors.toList());
     }
 
-    public void deleteAppointmentById(Long id) {
-        if (!appointmentRepository.existsById(id)) {
-            throw new IllegalStateException("Appointment with ID " + id + " does not exist.");
+    // Tạo cuộc hẹn mới
+    @Transactional
+    public Appointment createAppointment(Appointment appointment) {
+        // Kiểm tra trùng lịch
+        boolean isTimeSlotAvailable = !appointmentRepository
+                .existsByDoctorAndAppointmentDateAndAppointmentTime(
+                        appointment.getDoctor(),
+                        appointment.getAppointmentDate(),
+                        appointment.getAppointmentTime()
+                );
+
+        if (!isTimeSlotAvailable) {
+            throw new RuntimeException("Khung giờ này đã được đặt");
         }
-        appointmentRepository.deleteById(id);
-    }
+
+        // Đặt trạng thái mặc định
+        appointment.setStatus(Appointment.AppointmentStatus.PENDING);
+
+        return appointmentRepository.save(appointment);
     }
 
+    // Xác nhận cuộc hẹn
+    @Transactional
+    public Appointment confirmAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy cuộc hẹn"));
+
+        if (appointment.getStatus() == Appointment.AppointmentStatus.PENDING) {
+            appointment.setStatus(Appointment.AppointmentStatus.CONFIRMED);
+            return appointmentRepository.save(appointment);
+        }
+
+        throw new RuntimeException("Không thể xác nhận cuộc hẹn này");
+    }
+
+    // Hủy cuộc hẹn
+    @Transactional
+    public Appointment cancelAppointment(Long appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy cuộc hẹn"));
+
+        appointment.setStatus(Appointment.AppointmentStatus.CANCELLED);
+        return appointmentRepository.save(appointment);
+    }
+
+    // Lấy các cuộc hẹn sắp tới của bác sĩ
+    @Transactional(readOnly = true)
+    public List<Appointment> getUpcomingAppointments(Long doctorId) {
+        Doctor doctor = doctorService.getDoctorById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy bác sĩ"));
+
+        return appointmentRepository.findByDoctorAndStatus(
+                doctor,
+                Appointment.AppointmentStatus.PENDING
+        );
+    }
+
+    // Lấy tất cả các cuộc hẹn của bác sĩ trong một khoảng thời gian
+    @Transactional(readOnly = true)
+    public List<Appointment> getAppointmentsInRange(Long doctorId, LocalDate startDate, LocalDate endDate) {
+        Doctor doctor = doctorService.getDoctorById(doctorId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy bác sĩ"));
+
+        return appointmentRepository.findAppointmentsInRange(doctor, startDate, endDate);
+    }
+}

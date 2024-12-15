@@ -11,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class CategoryController {
@@ -43,8 +45,14 @@ public class CategoryController {
     @GetMapping("/categories/edit/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         Category category = categoryService.getCategoryById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:"
-                        + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
+
+        // Kiểm tra xem danh mục đã bị khóa chưa
+        if (category.isLocked()) {
+            model.addAttribute("error", "Danh mục với ID " + id + " đã bị khóa và không thể chỉnh sửa.");
+            return "error-page"; // Chuyển đến trang lỗi
+        }
+
         model.addAttribute("category", category);
         return "/categories/update-category";
     }
@@ -61,11 +69,20 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @GetMapping("/categories/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Long id, Model model) {
+    @GetMapping("/categories/lock/{id}")
+    public String lockCategory(@PathVariable("id") Long id, Model model) {
         Category category = categoryService.getCategoryById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
-        categoryService.deleteCategoryById(id);
+        categoryService.lockCategoryById(id); // Gọi phương thức khóa từ service
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/unlock/{id}")
+    public String unlockCategory(@PathVariable("id") Long id, Model model) {
+        Category category = categoryService.getCategoryById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
+        categoryService.unlockCategoryById(id); // Gọi phương thức mở khóa từ service
         model.addAttribute("categories", categoryService.getAllCategories());
         return "redirect:/categories";
     }

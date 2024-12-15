@@ -1,4 +1,4 @@
-package DoAnChuyenNganh.WebsiteChamSocThuCung;
+package DoAnChuyenNganh.WebsiteChamSocThuCung.config;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.security.CustomerOauth2UserService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.UserService;
@@ -14,19 +14,24 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final UserService userService;
+    private final CustomerOauth2UserService oauth2UserService; // Đưa vào constructor
+
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserService();
+        return userService;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         var auth = new DaoAuthenticationProvider();
@@ -34,6 +39,7 @@ public class SecurityConfig {
         auth.setPasswordEncoder(passwordEncoder());
         return auth;
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(@NotNull HttpSecurity http) throws Exception {
         return http
@@ -48,23 +54,23 @@ public class SecurityConfig {
                         .hasAnyAuthority("ADMIN")
                         .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
-                ) .
-                logout(logout -> logout
+                )
+                .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
                         .deleteCookies("JSESSIONID")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()
-                ) .
-                formLogin(formLogin -> formLogin
+                )
+                .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home", true)
                         .failureUrl("/login?error")
                         .permitAll()
-                ) .
-                rememberMe(rememberMe -> rememberMe
+                )
+                .rememberMe(rememberMe -> rememberMe
                         .key("hutech")
                         .rememberMeCookieName("hutech")
                         .tokenValiditySeconds(24 * 60 * 60)
@@ -73,24 +79,19 @@ public class SecurityConfig {
                 .oauth2Login(oauth2Login -> oauth2Login
                         .loginPage("/login")
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(oauth2UserService)
+                                .userService(oauth2UserService) // Sử dụng oauth2UserService đã được inject
                         )
-                ).
-                exceptionHandling(exceptionHandling -> exceptionHandling
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/access-denied")
-                ) .
-                sessionManagement(sessionManagement -> sessionManagement
+                )
+                .sessionManagement(sessionManagement -> sessionManagement
                         .maximumSessions(1)
                         .expiredUrl("/login")
-                ) .
-                httpBasic(httpBasic -> httpBasic
+                )
+                .httpBasic(httpBasic -> httpBasic
                         .realmName("hutech")
-                ) .
-                build();
+                )
+                .build();
     }
-    /*Adding oauth2Login start*/
-    @Autowired
-    private CustomerOauth2UserService oauth2UserService;
-    /*Adding oauth2Login end*/
-
 }

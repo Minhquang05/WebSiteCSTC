@@ -19,8 +19,4 @@ public class UserProfile {
         private String avatarUrl;  // URL của ảnh đại diện
 
         // Getter, Setter và constructor
-    }
-
-
-
-
+}

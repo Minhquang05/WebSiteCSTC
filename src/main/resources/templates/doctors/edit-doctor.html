@@ -1,79 +1,79 @@
-    <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org"
-          xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-          layout:decorate="~{layout}">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <title>Chỉnh Sửa Bác Sĩ</title>
-    </head>
-    <body>
-    <section layout:fragment="content" class="container mt-5">
-        <div class="container">
-            <h2 class="mt-4 mb-4">Chỉnh Sửa Bác Sĩ</h2>
-            <form action="#" th:action="@{/doctors/edit/{id}(id=${doctor.id})}" th:object="${doctor}" method="post">
-                <!-- Tên bác sĩ -->
-                <div class="form-group">
-                    <label for="name">Tên</label>
-                    <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Nhập tên bác sĩ" required>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Chỉnh Sửa Bác Sĩ</title>
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <div class="container">
+        <h2 class="mt-4 mb-4">Chỉnh Sửa Bác Sĩ</h2>
+        <form action="#" th:action="@{/doctors/edit/{id}(id=${doctor.id})}" th:object="${doctor}" method="post">
+            <!-- Tên bác sĩ -->
+            <div class="form-group">
+                <label for="name">Tên</label>
+                <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Nhập tên bác sĩ" required>
+            </div>
+
+            <!-- Chuyên môn -->
+            <div class="form-group">
+                <label for="specialization">Chuyên Môn</label>
+                <input type="text" id="specialization" th:field="*{specialization}" class="form-control" placeholder="Nhập chuyên môn" required>
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="form-group">
+                <label for="phone">Số Điện Thoại</label>
+                <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="Nhập số điện thoại" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
+            </div>
+
+            <!-- Hiển thị ảnh hiện tại -->
+            <h3>Ảnh hiện tại:</h3>
+            <div th:each="image : ${doctor.avatar}">
+                <img th:src="@{'/images/' + ${image}}" alt="Ảnh bác sĩ" width="100" height="100">
+            </div>
+
+            <!-- Tải ảnh mới -->
+            <h3>Ảnh mới:</h3>
+            <div class="form-group">
+                <label for="avatar">Ảnh đại diện:</label>
+                <input type="file" id="avatar" name="avatar" class="form-control">
+
+            </div>
+            <!-- Giờ làm việc -->
+            <div class="form-group">
+                <label for="workTime" class="form-label">Giờ làm:</label>
+                <div id="workTime" class="btn-group-toggle" data-toggle="buttons">
+                    <label th:each="workhour : ${workhours}" class="btn btn-outline-primary">
+                        <input type="checkbox" name="workTimes" th:value="${workhour.id}" autocomplete="off">
+                        <span th:text="${workhour.startTime}"></span>
+                    </label>
                 </div>
-
-                <!-- Chuyên môn -->
-                <div class="form-group">
-                    <label for="specialization">Chuyên Môn</label>
-                    <input type="text" id="specialization" th:field="*{specialization}" class="form-control" placeholder="Nhập chuyên môn" required>
-                </div>
-
-                <!-- Số điện thoại -->
-                <div class="form-group">
-                    <label for="phone">Số Điện Thoại</label>
-                    <input type="text" id="phone" th:field="*{phone}" class="form-control" placeholder="Nhập số điện thoại" required>
-                </div>
-
-                <!-- Email -->
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" th:field="*{email}" class="form-control" placeholder="Nhập email" required>
-                </div>
-
-                <!-- Hiển thị ảnh hiện tại -->
-                <h3>Ảnh hiện tại:</h3>
-                <div th:each="image : ${doctor.avatar}">
-                    <img th:src="@{'/images/' + ${image}}" alt="Ảnh bác sĩ" width="100" height="100">
-                </div>
-
-                <!-- Tải ảnh mới -->
-                <h3>Ảnh mới:</h3>
-                <div class="form-group">
-                    <label for="avatar">Ảnh đại diện:</label>
-                    <input type="file" id="avatar" name="avatar" class="form-control">
-
-                </div>
-                <!-- Giờ làm việc -->
-                <div class="form-group">
-                    <label for="workTime" class="form-label">Giờ làm:</label>
-                    <div id="workTime" class="btn-group-toggle" data-toggle="buttons">
-                        <label th:each="workhour : ${workhours}" class="btn btn-outline-primary">
-                            <input type="checkbox" name="workTimes" th:value="${workhour.id}" autocomplete="off">
-                            <span th:text="${workhour.startTime}"></span>
-                        </label>
-                    </div>
-                </div>
+            </div>
 
 
-                <!-- Các nút hành động -->
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
-                    <a href="/doctors" class="btn btn-secondary">Quay Lại</a>
-                </div>
-            </form>
-        </div>
-    </section>
-    </body>
+            <!-- Các nút hành động -->
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
+                <a href="/doctors" class="btn btn-secondary">Quay Lại</a>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    </html>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>

@@ -91,6 +91,33 @@
             background-color: #0056b3;
             opacity: 0.9;
         }
+
+        /* CSS cho hiệu ứng di chuyển vào giỏ hàng */
+        .fly-to-cart {
+            position: absolute;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.9;
+            transition: transform 1s ease, opacity 1s ease;
+        }
+
+        #cartIcon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+        }
+
+        #cartCount {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -121,10 +148,10 @@
                     </p>
 
                     <div th:if="${product.inventory > 0}">
-                        <form th:action="@{/cart/add}" method="post">
+                        <form id="addToCartForm" th:action="@{/cart/add}" method="post">
                             <input type="number" name="quantity" min="1" th:max="${product.inventory}" value="1" class="form-control d-inline-block" style="width: 70px; margin-right: 10px;">
                             <input type="hidden" th:value="${product.id}" name="productId"/>
-                            <button class="btn btn-add-cart btn-sm"><i class="fas fa-cart-plus"></i> Thêm vào Giỏ</button>
+                            <button type="submit" class="btn btn-add-cart btn-sm"><i class="fas fa-cart-plus"></i> Thêm vào Giỏ</button>
                         </form>
                     </div>
                 </div>
@@ -136,6 +163,57 @@
         </div>
     </div>
 </section>
+
+<!-- Giỏ hàng icon -->
+<div id="cartIcon" class="cart-icon">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cartCount">0</span>
+</div>
+
+<script>
+    // Khi form thêm sản phẩm vào giỏ được gửi
+    $("#addToCartForm").submit(function(e) {
+        e.preventDefault();  // Ngừng gửi form để xử lý bằng AJAX
+
+        var form = $(this);
+        var quantity = form.find('input[name="quantity"]').val();
+        var productId = form.find('input[name="productId"]').val();
+
+        // Tạo một phần tử hình ảnh tạm thời di chuyển tới giỏ hàng
+        var image = $('img.product-avatar').first().clone();
+        image.addClass('fly-to-cart').css({
+            left: form.offset().left + 'px',
+            top: form.offset().top + 'px',
+            width: '50px',
+            height: '50px'
+        }).appendTo('body');
+
+        // Tạo hiệu ứng di chuyển hình ảnh vào giỏ hàng
+        image.animate({
+            left: $("#cartIcon").offset().left + 'px',
+            top: $("#cartIcon").offset().top + 'px',
+            width: '20px',
+            height: '20px',
+            opacity: 0
+        }, 1000, function() {
+            image.remove(); // Xóa phần tử hình ảnh sau khi hiệu ứng hoàn tất
+        });
+
+        // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+        $.ajax({
+            url: '/cart/add',  // Đảm bảo URL này chính xác
+            type: 'POST',
+            data: form.serialize(),  // Serialize dữ liệu form
+            success: function(response) {
+                // Cập nhật số lượng sản phẩm trong giỏ hàng từ phản hồi
+                $("#cartCount").text(response.cartItemCount);  // Giả sử response trả về có trường cartItemCount
+            },
+            error: function() {
+                alert("Có lỗi khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại!");
+            }
+        });
+    });
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

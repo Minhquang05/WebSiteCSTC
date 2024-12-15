@@ -30,15 +30,18 @@
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.phone}"></td>
                 <td>
-                    <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
-                    <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure?')">Xóa</a>
+                    <a th:if="${employee.accountNonLocked}" th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
+                    <a th:if="${employee.accountNonLocked}" th:href="@{/employees/lock/{id}(id=${employee.id})}" class="btn btn-warning btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn khóa nhân viên này không?')">Khóa</a>
+                    <a th:if="${!employee.accountNonLocked}" th:href="@{/employees/unlock/{id}(id=${employee.id})}" class="btn btn-info btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn mở khóa nhân viên này không?')">Mở khóa</a>
+                    <span th:if="${employee.accountNonLocked}" class="text-success">Đã mở khóa</span>
+                    <span th:if="${!employee.accountNonLocked}" class="text-danger">Đã khóa</span>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
 </section>
 </body>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

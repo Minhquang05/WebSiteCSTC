@@ -4,79 +4,116 @@ import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.WorkHourService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/workHour")
 @RequiredArgsConstructor
 public class WorkHourController {
-    @Autowired
     private final WorkHourService workHourService;
 
-    @GetMapping("/workHour/add")
+    // Hiển thị form thêm giờ làm việc
+    @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("workHour", new WorkHour());
-        return "/workHour/add-workHour";
+        return "workHour/add-workHour";
     }
 
-    @PostMapping("/workHour/add")
-    public String addWorkHour(@Valid WorkHour workHour, BindingResult result, @RequestParam("time") List<String> timeList) {
+    // Thêm giờ làm việc mới
+    @PostMapping("/add")
+    public String addWorkHour(
+            @Valid WorkHour workHour,
+            BindingResult result,
+            @RequestParam("time") List<String> timeList,
+            RedirectAttributes redirectAttributes
+    ) {
         if (result.hasErrors()) {
-            return "/workHour/add-workHour";
-        }
-        for(int i=0;i<timeList.size();i++)
-        {
-            workHour.setStartTime(timeList.get(i));
-            workHourService.saveWorkHour(workHour);
+            return "workHour/add-workHour";  // Trả về form nếu có lỗi
         }
 
+        try {
+            for (String time : timeList) {
+                WorkHour newWorkHour = new WorkHour();
+                newWorkHour.setStartTime(time);
+                newWorkHour.setDoctor(workHour.getDoctor()); // Lưu bác sĩ hoặc các thông tin khác
+                // Các thuộc tính khác từ workHour gốc nếu cần thiết
+                workHourService.saveWorkHour(newWorkHour);
+            }
+            redirectAttributes.addFlashAttribute("successMessage", "Thêm giờ làm việc thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra: " + e.getMessage());
+        }
 
-        return "redirect:/workHour";
+        return "redirect:/workHour";  // Chuyển hướng về trang danh sách sau khi thêm
     }
 
-    @GetMapping("/workHour")
+    // Hiển thị danh sách giờ làm việc
+    @GetMapping
     public String listWorkHour(Model model) {
-        List<WorkHour> workHours = workHourService.getAllWorkHour();
-        model.addAttribute("workHours", workHours);
-        return "/workHour/workHour-list";
+        try {
+            List<WorkHour> workHours = workHourService.getAllWorkHour();  // Lấy tất cả giờ làm việc
+            model.addAttribute("workHours", workHours);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Không thể tải danh sách giờ làm việc");
+            e.printStackTrace();
+        }
+        return "workHour/workHour-list";  // Trả về view danh sách
     }
 
-    @GetMapping("/workHour/edit/{id}")
+    // Hiển thị form sửa giờ làm việc
+    @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") Long id, Model model) {
         WorkHour workHour = workHourService.getWorkHourById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid workHour Id:"
-                        + id));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid workHour Id: " + id));
         model.addAttribute("workHour", workHour);
-        return "/workHour/update-workHour";
+        return "workHour/update-workHour";
     }
 
-    @PostMapping("/workHour/update/{id}")
-    public String updateWorkHour(@PathVariable("id") Long id, @Valid WorkHour workHour,
-                                 BindingResult result, Model model) {
+    // Cập nhật giờ làm việc
+    @PostMapping("/update/{id}")
+    public String updateWorkHour(
+            @PathVariable("id") Long id,
+            @Valid WorkHour workHour,
+            BindingResult result,
+            RedirectAttributes redirectAttributes
+    ) {
         if (result.hasErrors()) {
-            workHour.setId(id);
-            return "/workHour/update-workHour";
+            workHour.setId(id);  // Đảm bảo giữ lại id khi có lỗi validation
+            return "workHour/update-workHour";
         }
-        workHourService.updateWorkHour(workHour);
-        model.addAttribute("workHour", workHourService.getAllWorkHour());
-        return "redirect:/workHour";
+
+        try {
+            workHourService.updateWorkHour(workHour);  // Cập nhật giờ làm việc
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật giờ làm việc thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra: " + e.getMessage());
+        }
+
+        return "redirect:/workHour";  // Chuyển hướng về danh sách sau khi cập nhật
     }
 
-    @GetMapping("/workHour/delete/{id}")
-    public String deleteWorkHour(@PathVariable("id") Long id, Model model) {
-        WorkHour workHour = workHourService.getWorkHourById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid workHour Id:"
-                        + id));
-        workHourService.deleteWorkHour(id);
-        model.addAttribute("workHour", workHourService.getAllWorkHour());
-        return "redirect:/workHour";
+    // Xóa giờ làm việc
+    @GetMapping("/delete/{id}")
+    public String deleteWorkHour(
+            @PathVariable("id") Long id,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            WorkHour workHour = workHourService.getWorkHourById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid workHour Id: " + id));
+
+            workHourService.deleteWorkHour(id);  // Xóa giờ làm việc
+            redirectAttributes.addFlashAttribute("successMessage", "Xóa giờ làm việc thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra: " + e.getMessage());
+        }
+
+        return "redirect:/workHour";  // Chuyển hướng về trang danh sách sau khi xóa
     }
 }

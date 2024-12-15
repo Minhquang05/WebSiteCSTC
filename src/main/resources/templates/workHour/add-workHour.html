@@ -1,4 +1,5 @@
-<html lang="en" xmlns:layout="" xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,16 +23,32 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 320px;
         }
-        .schedule-form label {
-            display: block;
-            margin: 10px 0;
+        .schedule-form h3 {
+            margin-bottom: 10px;
         }
-        .schedule-form input[type="checkbox"] {
-            margin-right: 10px;
+        .schedule-form .time-slot {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .btn {
+        .time-slot button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .time-slot button.selected {
+            background-color: #28a745;
+        }
+        .time-slot button:hover {
+            background-color: #0056b3;
+        }
+        .btn-submit {
             display: block;
             width: 100%;
             background-color: #007BFF;
@@ -43,51 +60,69 @@
             cursor: pointer;
             font-size: 16px;
         }
-        .btn:hover {
+        .btn-submit:hover {
             background-color: #0056b3;
-        }
-        .saved-schedule {
-            margin-top: 30px;
-            width: 300px;
-        }
-        .saved-schedule h2 {
-            color: #333;
-        }
-        .saved-schedule ul {
-            list-style: none;
-            padding: 0;
-        }
-        .saved-schedule ul li {
-            background: #007BFF;
-            color: #fff;
-            padding: 5px 10px;
-            margin: 5px 0;
-            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 <h1>Chọn Giờ Làm Việc</h1>
-<section layout:fragment="content" class="container mt-5">
-    <div class="container">
-        <h2 class="mt-4 mb-4">KHUNG GIỜ LÀM VIỆC</h2>
-        <form th:action="@{/workHour/add}" th:object="${workHour}" method="post">
-            <div class="schedule-form">
-                <label>Chọn khung giờ:</label>
-                <form id="scheduleForm">
-                    <label><input type="checkbox" name="time" value="08:00 - 10:00"> 08:00 - 10:00</label>
-                    <label><input type="checkbox" name="time" value="10:00 - 12:00"> 10:00 - 12:00</label>
-                    <label><input type="checkbox" name="time" value="12:00 - 14:00"> 12:00 - 14:00</label>
-                    <label><input type="checkbox" name="time" value="14:00 - 16:00"> 14:00 - 16:00</label>
-                    <label><input type="checkbox" name="time" value="16:00 - 18:00"> 16:00 - 18:00</label>
-                    <label><input type="checkbox" name="time" value="18:00 - 20:00"> 18:00 - 20:00</label>
-                    <button type="submit" class="btn btn-primary">Xác nhận</button>
-                </form>
-
-            </div>
-
-        </form>
+<div class="schedule-form">
+    <h3>Chọn khung giờ:</h3>
+    <div class="time-slot" id="timeSlot">
+        <!-- Các khung giờ sẽ được thêm động bằng JavaScript -->
     </div>
-</section>
+    <form id="scheduleForm" action="/workHour/add" method="post">
+        <input type="hidden" name="selectedTime" id="selectedTime">
+        <button type="submit" class="btn-submit">Xác nhận</button>
+    </form>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const timeSlotContainer = document.getElementById('timeSlot');
+        const selectedTimeInput = document.getElementById('selectedTime');
+
+        // Danh sách khung giờ từ 10:00 đến 19:00, cách nhau 30 phút
+        const timeSlots = [
+            "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+            "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+            "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
+            "19:00","19:30"
+        ];
+
+        // Thêm các nút bấm khung giờ vào giao diện
+        timeSlots.forEach(slot => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.dataset.time = slot;
+            button.textContent = slot;
+            timeSlotContainer.appendChild(button);
+        });
+
+        // Xử lý sự kiện chọn khung giờ
+        timeSlotContainer.addEventListener('click', function (e) {
+            if (e.target.tagName === 'BUTTON') {
+                // Xóa trạng thái đã chọn từ các nút khác
+                const buttons = timeSlotContainer.querySelectorAll('button');
+                buttons.forEach(button => button.classList.remove('selected'));
+
+                // Thêm trạng thái đã chọn vào nút được click
+                e.target.classList.add('selected');
+
+                // Gán giá trị khung giờ đã chọn vào input ẩn
+                selectedTimeInput.value = e.target.dataset.time;
+            }
+        });
+
+        // Kiểm tra trước khi gửi form
+        const scheduleForm = document.getElementById('scheduleForm');
+        scheduleForm.addEventListener('submit', function (e) {
+            if (!selectedTimeInput.value) {
+                e.preventDefault(); // Ngăn gửi form nếu chưa chọn khung giờ
+                alert('Vui lòng chọn một khung giờ trước khi xác nhận.');
+            }
+        });
+    });
+</script>
 </body>
 </html>

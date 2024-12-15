@@ -1,3 +1,4 @@
+
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Category;
@@ -107,16 +108,16 @@ public class DoctorController {
 
 
 
-    // Hiển thị trang xác nhận xóa bác sĩ
-    @GetMapping("/delete/{id}")
-    public String getDeleteDoctorPage(@PathVariable Long id, Model model) {
-        Optional<Doctor> doctor = doctorService.getDoctorById(id);
-        if (doctor.isPresent()) {
-            doctorService.deleteDoctor(id);
-            return "redirect:/doctors"; // Trang xác nhận xóa
-        }
-        return "redirect:/doctors";
-    }
+//    // Hiển thị trang xác nhận xóa bác sĩ
+//    @GetMapping("/delete/{id}")
+//    public String getDeleteDoctorPage(@PathVariable Long id, Model model) {
+//        Optional<Doctor> doctor = doctorService.getDoctorById(id);
+//        if (doctor.isPresent()) {
+//            doctorService.deleteDoctor(id);
+//            return "redirect:/doctors"; // Trang xác nhận xóa
+//        }
+//        return "redirect:/doctors";
+//    }
 
     @GetMapping("/detail/{id}")
     public String detailDoctor(@PathVariable Long id, Model model) {

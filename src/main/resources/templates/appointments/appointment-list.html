@@ -5,47 +5,110 @@
       layout:decorate="~{layout}">
 <head>
     <title th:text="${title} ?: 'LỊCH HẸN'">LỊCH HẸN</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <section layout:fragment="content" class="container mt-5">
-    <div class="container">
-        <h2 class="mt-4 mb-4">DANH SÁCH LỊCH HẸN</h2>
-        <div>
-            <a  th:href="@{/appointments/create}" class="btn btn-primary mb-3">
-                Đặt lịch hẹn
-            </a>
-        </div>
-        <table class="table table-bordered table-hover">
-            <thead class="table-dark">
-            <tr>
-                <th>Mã lịch hẹn</th>
-                <th>Tên Khách Hàng</th>
-                <th>Ngày đặt</th>
-                <th>Trạng thái</th>
-                <th>Chức năng</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="appointment : ${appointments}">
-                <td style="font-size: 1em;" th:text="${appointment.id}"></td>
-                <td style="font-size: 1em;" th:text="${appointment.customerName}"></td>
-                <td style="font-size: 1em;" th:text="${appointment.appointmentDate}"></td>
-                <td style="font-size: 1em;" th:text="${appointment.appointmentState}"></td>
-                <td>
-                    <a style="width:100px; height:30px" th:href="@{/appointments/detail/{id}(id=${appointment.id})}" class="btn btn-warning btn-sm">Chi tiết</a>
-
-                    <a style="width:100px; height:30px" th:href="@{#}" class="btn btn-info btn-sm">Hủy</a>
-                </td>
-
-            </tr>
-            </tbody>
-        </table>
+    <h2 class="mt-4 mb-4">DANH SÁCH LỊCH HẸN</h2>
+    <div>
+<!--        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#appointmentModal">-->
+<!--            Đặt lịch hẹn-->
+<!--        </button>-->
+        <a th:href="@{/appointments/create}" class="btn btn-primary mb-3"  >Đặt lịch hẹn</a>
     </div>
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Số Điện Thoại</th>
+            <th>Họ và Tên</th>
+            <th>Tổng Số Khách</th>
+            <th>Bác Sĩ</th>
+            <th>Dịch Vụ</th>
+            <th>Ngày Đặt Lịch</th>
+            <th>Khung Giờ Khám</th>
+            <th>Ghi Chú</th>
+            <th>Chức Năng</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="appointment : ${appointments}">
+            <td th:text="${appointment.customerPhone}"></td>
+            <td th:text="${appointment.customerName}"></td>
+            <td th:text="${appointment.totalGuests}"></td>
+            <td th:text="${appointment.doctorName}"></td>
+            <td th:text="${appointment.serviceName}"></td>
+            <td th:text="${#dates.format(appointment.appointmentDate, 'dd/MM/yyyy')}"></td>
+            <td th:text="${appointment.appointmentTime}"></td>
+            <td th:text="${appointment.note}"></td>
+            <td>
+                <a th:href="@{/appointments/detail/{id}(id=${appointment.id})}" class="btn btn-warning btn-sm">Chi tiết</a>
+                <a th:href="@{/appointments/cancel/{id}(id=${appointment.id})}" class="btn btn-danger btn-sm">Hủy</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </section>
-</body>
 
-<script th:src="@{../static/js/jquery.min.js}"></script>
+<!-- Modal Đặt Lịch -->
+<div class="modal fade" id="appointmentModal" tabindex="-1" aria-labelledby="appointmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentModalLabel">Đặt Lịch Khám</h5>
+                <button type="button" class="btn-close" onclick="/create-appointment.html" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+            <div class="modal-body">
+                <form id="appointmentForm" th:action="@{/appointments/create}" method="post" class="needs-validation" novalidate>
+                    <div class="form-group">
+                        <label for="customerName">Họ và Tên</label>
+                        <input type="text" id="customerName" name="customerName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">Số Điện Thoại</label>
+                        <input type="text" id="customerPhone" name="customerPhone" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalGuests">Tổng Số Khách</label>
+                        <input type="number" id="totalGuests" name="totalGuests" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="doctor">Bác Sĩ</label>
+                        <select id="doctor" name="doctor" class="form-control" required>
+                            <option value="" disabled selected>Chọn bác sĩ</option>
+                            <option th:each="doctor : ${doctors}" th:value="${doctor.id}" th:text="${doctor.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Dịch Vụ</label>
+                        <select id="service" name="service" class="form-control" required>
+                            <option value="" disabled selected>Chọn dịch vụ</option>
+                            <option th:each="service : ${services}" th:value="${service.id}" th:text="${service.name}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentDate">Ngày Đặt Lịch</label>
+                        <input type="date" id="appointmentDate" name="appointmentDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointmentTime">Khung Giờ Khám</label>
+                        <input type="time" id="appointmentTime" name="appointmentTime" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note">Ghi Chú</label>
+                        <textarea id="note" name="note" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Đặt Lịch</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

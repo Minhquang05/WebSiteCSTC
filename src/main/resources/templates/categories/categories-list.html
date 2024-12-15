@@ -12,27 +12,32 @@
     <div class="container">
         <h2 class="mt-4 mb-4">DANH MỤC SẢN PHẨM</h2>
         <a th:href="@{/categories/add}" class="btn btn-primary mb-3">Thêm danh mục mới</a>
-         <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover">
             <thead class="table-dark">
-                <tr>
-                    <th>Mã mục sản phẩm</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Chức năng</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="category : ${categories}">
-                    <td th:text="${category.id}"></td>
-                    <td th:text="${category.name}"></td>
-                    <td>
-                        <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
-                        <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Xóa</a>
-                    </td>
-                </tr>
-                </tbody>
+            <tr>
+                <th>Mã mục sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Trạng thái</th> <!-- Thêm cột trạng thái -->
+                <th>Chức năng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.id}"></td>
+                <td th:text="${category.name}"></td>
+                <td>
+                    <span th:if="${category.locked != null}" th:text="${category.locked ? 'Đã bị khóa' : 'Mở khóa'}"></span>
+                    <span th:if="${category.locked == null}">Không xác định</span>
+                </td>
+                <td>
+                    <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
+                    <a th:if="${category.locked}" th:href="@{/categories/unlock/{id}(id=${category.id})}" class="btn btn-warning btn-sm">Mở khóa</a>
+                    <a th:if="${category.locked == null or !category.locked}" th:href="@{/categories/lock/{id}(id=${category.id})}" class="btn btn-secondary btn-sm">Khóa</a>
+                </td>
+            </tr>
+            </tbody>
         </table>
     </div>
-
 </section>
 </body>
 </html>

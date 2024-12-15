@@ -21,7 +21,7 @@ public class UserProfileController {
 
     @Autowired
     private UserProfileService userProfileService;
-//    @GetMapping("/profiles")
+    //    @GetMapping("/profiles")
 //    public String showprofiles(@ModelAttribute UserProfile userProfile) {
 //        userProfileService.getUserProfile(userProfile.getId());
 //        return "redirect:/profiles";

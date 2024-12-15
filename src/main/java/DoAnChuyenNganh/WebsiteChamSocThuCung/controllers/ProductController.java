@@ -116,7 +116,7 @@ public class ProductController {
             product.setId(id); // set id to keep it in the form in case of errors
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("product", product);
-            return "/products/update-product";
+            return "/products/update-product"; // Adjust this path as necessary
         }
 
         List<String> imagePaths = new ArrayList<>();

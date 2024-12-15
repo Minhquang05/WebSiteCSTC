@@ -17,10 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 @Service
 @Slf4j
 @Transactional
-public class UserService implements UserDetailsService{
+public class UserService implements UserDetailsService {
     @Autowired
     private IUserRepository userRepository;
     @Autowired
@@ -32,13 +33,15 @@ public class UserService implements UserDetailsService{
     }
 
     public void setDefaultRole(String username) {
-        if(username.equals("ADMIN"))
+        if (username.equals("ADMIN"))
             userRepository.findByUsername(username).ifPresentOrElse(
                     user -> {
                         user.getRoles().add(roleRepository.findRoleById(Role.ADMIN.value));
                         userRepository.save(user);
                     },
-                    () -> { throw new UsernameNotFoundException("User not found"); }
+                    () -> {
+                        throw new UsernameNotFoundException("User not found");
+                    }
             );
         else
             userRepository.findByUsername(username).ifPresentOrElse(
@@ -46,7 +49,9 @@ public class UserService implements UserDetailsService{
                         user.getRoles().add(roleRepository.findRoleById(Role.USER.value));
                         userRepository.save(user);
                     },
-                    () -> { throw new UsernameNotFoundException("User not found"); }
+                    () -> {
+                        throw new UsernameNotFoundException("User not found");
+                    }
             );
     }
 
@@ -56,12 +61,14 @@ public class UserService implements UserDetailsService{
                     user.getRoles().add(roleRepository.findRoleById(Long.parseLong("3")));
                     userRepository.save(user);
                 },
-                () -> { throw new UsernameNotFoundException("User not found"); }
-        );}
+                () -> {
+                    throw new UsernameNotFoundException("User not found");
+                }
+        );
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws
-            UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return org.springframework.security.core.userdetails.User
@@ -75,37 +82,36 @@ public class UserService implements UserDetailsService{
                 .build();
     }
 
-    public Optional<User> getUserById(Long id){ return userRepository.findById(id); }
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
 
-    public Optional<User> findByUsername(String username) throws
-            UsernameNotFoundException {
+    public Optional<User> findByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username);
     }
 
-    public List<String> checkExistingUser(String email, String username, String phone){
-        List<String> errors = new ArrayList<String>();
-        if(userRepository.findByEmail(email).isPresent())
+    public List<String> checkExistingUser(String email, String username, String phone) {
+        List<String> errors = new ArrayList<>();
+        if (userRepository.findByEmail(email).isPresent())
             errors.add("Email already existed");
-        if(userRepository.findByUsername(username).isPresent())
+        if (userRepository.findByUsername(username).isPresent())
             errors.add("Username already existed");
-        if(userRepository.findByPhone(phone).isPresent())
+        if (userRepository.findByPhone(phone).isPresent())
             errors.add("Phone already registered");
         return errors;
     }
 
-    public List<User> loadEmployees(){
-        List<User> employeeList = new ArrayList<User>();
+    public List<User> loadEmployees() {
+        List<User> employeeList = new ArrayList<>();
         boolean isEmployee = false;
-        for(User u : userRepository.findAll()){
-            for(DoAnChuyenNganh.WebsiteChamSocThuCung.models.Role r : u.getRoles()){
-                if(r.getId()==3)
-                {
+        for (User u : userRepository.findAll()) {
+            for (DoAnChuyenNganh.WebsiteChamSocThuCung.models.Role r : u.getRoles()) {
+                if (r.getId() == 3) {
                     isEmployee = true;
                     break;
                 }
             }
-            if(isEmployee)
-            {
+            if (isEmployee) {
                 employeeList.add(u);
                 isEmployee = false;
             }
@@ -125,8 +131,18 @@ public class UserService implements UserDetailsService{
         return userRepository.save(existingUser);
     }
 
-    // Delete user by ID
-    public void delete(Long id) {
-        userRepository.deleteById(id);
+    // Khóa người dùng
+    public void lock(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + id + " does not exist."));
+        user.setAccountNonLocked(false); // Giả sử bạn có thuộc tính này trong User
+        userRepository.save(user);
+    }
+
+    public void unlock(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("User with ID " + id + " does not exist."));
+        user.setAccountNonLocked(true); // Đặt thuộc tính này thành true
+        userRepository.save(user);
     }
 }

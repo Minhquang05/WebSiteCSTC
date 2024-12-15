@@ -20,5 +20,3 @@ public class UserProfileService {
                 .orElseThrow(() -> new RuntimeException("User profile not found"));
     }
 }
-
-

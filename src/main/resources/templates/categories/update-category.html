@@ -10,6 +10,12 @@
 <body>
 <section layout:fragment="content" class="container mt-5">
   <h1 class="mb-4">Cập Nhật Danh Mục</h1>
+
+  <!-- Hiển thị thông báo lỗi nếu danh mục đã bị khóa -->
+  <div th:if="${error}" class="alert alert-danger">
+    <p th:text="${error}"></p>
+  </div>
+
   <form th:action="@{/categories/update/{id}(id=${category.id})}"
         th:object="${category}" method="post" class="needs-validation" novalidate>
     <div class="mb-3">
