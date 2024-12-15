@@ -140,7 +140,7 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('USER')">
                     <a id="myOrders" href="#" class="nav-link text-dark">ĐƠN HÀNG</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
+                <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN','DOCTOR')">
                     <a th:href="@{/doctors}" class="nav-link text-dark">QUẢN LÝ BÁC SĨ</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN')">
