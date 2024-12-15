@@ -7,6 +7,7 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -40,6 +41,10 @@ public class Doctor {
     private Set<Appointment> appointments = new HashSet<>();
 
     public void setWorkTime(Set<WorkHour> workHours) {
+    }
+
+    public void setWorkTime(Stream<Long> workHours) {
+
     }
     // Getters and Setters
 }

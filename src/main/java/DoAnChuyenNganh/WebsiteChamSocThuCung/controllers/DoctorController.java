@@ -3,11 +3,13 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Category;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.WorkHourService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/doctors")
@@ -31,7 +34,6 @@ public class DoctorController {
 
     @Autowired
     private WorkHourService workHourService;
-
     // Hiển thị danh sách bác sĩ
     @GetMapping
     public String getAllDoctors(Model model) {
@@ -79,7 +81,9 @@ public class DoctorController {
     @PostMapping("/edit/{id}")
     public String updateDoctor(@PathVariable Long id,
                                @ModelAttribute Doctor updatedDoctor,
-                               @RequestParam("avatar") File avatar) {
+                               @RequestParam("avatar") File avatar,
+                               @RequestParam List<Long> workTimes) {
+        Stream<Long> workHours = workTimes.stream();
         Optional<Doctor> existingDoctor = doctorService.getDoctorById(id);
         if (existingDoctor.isPresent()) {
             Doctor doctor = existingDoctor.get();
@@ -100,6 +104,7 @@ public class DoctorController {
                     e.printStackTrace();  // Nếu có lỗi trong việc tải ảnh
                 }
             }
+            doctor.setWorkTime(workHours);
             doctorService.saveDoctor(doctor);  // Lưu bác sĩ vào cơ sở dữ liệu
         }
         return "redirect:/doctors";  // Sau khi cập nhật xong, chuyển về trang danh sách bác sĩ
