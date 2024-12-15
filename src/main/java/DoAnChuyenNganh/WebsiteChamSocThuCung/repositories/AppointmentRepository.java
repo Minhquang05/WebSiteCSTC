@@ -1,3 +1,4 @@
+
 package DoAnChuyenNganh.WebsiteChamSocThuCung.repositories;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
@@ -10,4 +11,3 @@ import org.springframework.stereotype.Repository;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 }
-

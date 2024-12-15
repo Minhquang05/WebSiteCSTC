@@ -7,6 +7,7 @@ import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.WorkHourService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,7 @@ public class DoctorController {
 
     @Autowired
     private WorkHourService workHourService;
+
     // Hiển thị danh sách bác sĩ
     @GetMapping
     public String getAllDoctors(Model model) {
@@ -104,7 +106,6 @@ public class DoctorController {
                     e.printStackTrace();  // Nếu có lỗi trong việc tải ảnh
                 }
             }
-            doctor.setWorkTime(workHours);
             doctorService.saveDoctor(doctor);  // Lưu bác sĩ vào cơ sở dữ liệu
         }
         return "redirect:/doctors";  // Sau khi cập nhật xong, chuyển về trang danh sách bác sĩ
@@ -156,5 +157,37 @@ public class DoctorController {
         return "redirect:/doctors";
     }
 
+    @GetMapping("/schedule/{id}")
+    public String getSchedulePage(@PathVariable Long id, Model model) {
+        Doctor doctor = doctorService.getDoctorById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor id: " + id));
+        List<WorkHour> allWorkHours = workHourService.getAllWorkHour(); // Lấy tất cả giờ làm việc
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("allWorkHours", allWorkHours);
+        return "doctors/doctor-schedule"; // Tên template HTML
+    }
+    @Transactional
+    @PostMapping("/schedule/{id}")
+    public String updateSchedule(@PathVariable Long id,
+                                 @RequestParam(value = "time", required = false) List<Long> workTimeIds) {
+        System.out.println("Received workTimeIds: " + workTimeIds);  // Kiểm tra giá trị của workTimeIds
+
+        Doctor doctor = doctorService.getDoctorById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor id: " + id));
+
+        Set<WorkHour> selectedWorkHours = new HashSet<>();
+        if (workTimeIds != null && !workTimeIds.isEmpty()) {
+            selectedWorkHours = workTimeIds.stream()
+                    .map(workHourService::getWorkHourById)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet());
+        }
+
+        doctor.setWorkTime(selectedWorkHours);  // Cập nhật giờ làm việc
+        doctorService.saveDoctor(doctor);      // Lưu thay đổi vào cơ sở dữ liệu
+
+        return "redirect:/doctors";  // Chuyển hướng về danh sách bác sĩ
+    }
 
 }

@@ -42,4 +42,18 @@ public class WorkHourService {
     public void deleteWorkHour(Long id) {
         workHourRepository.deleteById(id);
     }
+    public List<WorkHour> getWorkHoursByIds(List<Long> ids) {
+        return workHourRepository.findAllById(ids);
+    }
+
+    // Lấy tất cả giờ làm việc
+    public List<WorkHour> findAllWorkHours() {
+        return workHourRepository.findAll();
+    }
+
+    // Tìm giờ làm việc theo danh sách ID
+    public List<WorkHour> findWorkHoursByIds(List<Long> ids) {
+        return workHourRepository.findAllById(ids);
+    }
+
 }

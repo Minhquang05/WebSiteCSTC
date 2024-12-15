@@ -23,12 +23,20 @@ public class DoctorService {
         return doctorRepository.findById(id);
     }
 
-    public void saveDoctor(Doctor doctor) {
-        doctorRepository.save(doctor);
+    public Doctor saveDoctor(Doctor doctor) {
+        return doctorRepository.save(doctor);
     }
+
 
     public void deleteDoctor(Long id) {
         doctorRepository.deleteById(id);
+    }
+
+    public Doctor findDoctorById(Long id) {
+        return doctorRepository.findById(id).orElse(null);
+    }
+    public List<Doctor> findAllDoctors() {
+        return doctorRepository.findAll();
     }
 
 }

@@ -33,6 +33,7 @@
                 <td th:text="${doctor.phone}"></td>
                 <td th:text="${doctor.email}"></td>
                 <td>
+                    <a th:href="@{/doctors/schedule/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">Sửa Giờ Làm Việc</a>
                     <a th:href="@{/doctors/detail/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">Chi tiết</a>
                     <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-success btn-sm">Chỉnh Sửa</a>
                     <a th:href="@{/doctors/delete/{id}(id=${doctor.id})}" class="btn btn-danger btn-sm"

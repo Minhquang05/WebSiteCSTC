@@ -2,8 +2,6 @@ package DoAnChuyenNganh.WebsiteChamSocThuCung.services;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.repositories.AppointmentRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +18,6 @@ public class AppointmentService {
     public List<Appointment> getAllAppointment() {
         return appointmentRepository.findAll();
     }
-
-//    // Lấy chi tiết lịch hẹn theo ID
-//    public Appointment getAppointmentById(Long id) {
-//        return appointmentRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Appointment with ID " + id + " does not exist."));
-//    }
 
     // Tạo mới lịch hẹn
     public Appointment createAppointment(Appointment appointment) {

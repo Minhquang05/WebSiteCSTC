@@ -1,3 +1,4 @@
+
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
@@ -48,8 +49,8 @@ public class AppointmentController {
     public String createAppointment( Appointment appointment, @RequestParam("apntDate") String date, @RequestParam("availableTime") String availableTime) {
         try{
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-           WorkHour workHour = workHourService.getWorkHourById(Long.valueOf(availableTime))
-                   .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + availableTime));;
+            WorkHour workHour = workHourService.getWorkHourById(Long.valueOf(availableTime))
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + availableTime));;
             date = date+ " "+workHour.getStartTime().replace("h",":00") ;
             System.out.println("Appointment date: "+ date);
             appointment.setAppointmentDate(df.parse(date));

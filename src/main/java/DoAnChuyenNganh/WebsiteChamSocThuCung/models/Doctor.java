@@ -30,7 +30,7 @@ public class Doctor {
     private String phone;
     private String email;
     private String avatar;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "doctor_worktime",
             joinColumns = @JoinColumn(name = "doctor_id"),
@@ -41,6 +41,10 @@ public class Doctor {
     private Set<Appointment> appointments = new HashSet<>();
 
     public void setWorkTime(Set<WorkHour> workHours) {
+
+    }
+
+    public void setWorkHours(Set<WorkHour> workHours) {
     }
 
     public void setWorkTime(Stream<Long> workHours) {
