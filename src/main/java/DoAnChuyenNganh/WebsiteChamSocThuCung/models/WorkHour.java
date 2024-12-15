@@ -22,6 +22,8 @@ public class WorkHour {
     @Column(name = "START_TIME")
     private String StartTime;
 
+//    @ManyToMany(mappedBy = "workTime", cascade = CascadeType.ALL)
+//    private Set<Doctor> doctors = new HashSet<>();
     @ManyToMany(mappedBy = "workTime")
     private Set<Doctor> doctors = new HashSet<>();
 //    @OneToMany(mappedBy = "WorkHour")

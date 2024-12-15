@@ -88,6 +88,8 @@ public class SecurityConfig {
                 ) .
                 build();
     }
+
+
     /*Adding oauth2Login start*/
     @Autowired
     private CustomerOauth2UserService oauth2UserService;

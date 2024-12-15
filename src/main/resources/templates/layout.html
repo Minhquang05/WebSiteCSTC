@@ -149,9 +149,9 @@
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'EMPLOYEE', 'DOCTOR')">
                     <a th:href="@{/homedoctors}" class="nav-link text-dark">BÁC SĨ</a>
                 </li>
-                <li class="nav-item" sec:authorize="hasAnyAuthority('USER', 'DOCTOR','ADMIN', 'EMPLOYEE')">
-                    <a id="profile" th:href="@{/profiles/{username}}" class="nav-link text-dark">HỒ SƠ</a>
-                </li>
+<!--                <li class="nav-item" sec:authorize="hasAnyAuthority('USER', 'DOCTOR','ADMIN', 'EMPLOYEE')">-->
+<!--                    <a id="profile" th:href="@{/profiles/{username}}" class="nav-link text-dark">HỒ SƠ</a>-->
+<!--                </li>-->
                 <li class="nav-item" sec:authorize="hasAnyAuthority('ADMIN', 'USER', 'DOCTOR', 'EMPLOYEE')">
                     <a th:href="@{/appointments}" class="nav-link text-dark">LỊCH KHÁM</a>
                 </li>
@@ -170,17 +170,178 @@
 
 </main>
 
-<div class="float-contact">
-    <button class="chat-zalo">
-        <a href="https://zalo.me/0359688315" target="_blank"><i class="icon-whatsapp"></i> Chat Zalo</a>
+<div class="float-contact-wrapper">
+    <button class="toggle-menu">
+        <i class="icon-menu"></i>
     </button>
-    <button class="chat-face">
-        <a href="https://m.me/trai.quang.12" target="_blank"><i class="icon-facebook" aria-hidden="true"></i> Chat Facebook</a>
-    </button>
-    <button class="hotline">
-        <a href="tel:0359688315"><i class="icon-phone" aria-hidden="true"></i> Hotline: 0359688315</a>
-    </button>
+    <div class="float-contact" style="display: none;">
+        <button class="contact-item call">
+            <a href="tel:0359688315">
+                <i class="phone-icon"></i> Gọi ngay
+            </a>
+        </button>
+        <button class="contact-item zalo">
+            <a href="https://zalo.me/0359688315" target="_blank">
+                <i class="icon-zalo"></i> Chat qua Zalo
+            </a>
+        </button>
+        <button class="contact-item email">
+            <a href="https://nguyenquangtrai.100203@gmail.com" target="_blank">
+                <i class="icon-email"></i> Đăng kí thông tin và để lại lời nhắn
+            </a>
+        </button>
+        <button class="contact-item location">
+            <a href="https://www.google.com/maps/place/The+Sentry+P/@10.801811,106.733339,17z/data=!3m1!4b1!4m6!3m5!1s0x317527179e6734f9:0x4d6c22f2b294752!8m2!3d10.801811!4d106.7359139!16s%2Fg%2F11jsr4bl1g?hl=vi-VN&entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D" target="_blank">
+                <i class="icon-location"></i> Xem địa chỉ doanh nghiệp
+            </a>
+        </button>
+        <button class="close-menu">
+            <a href="#">
+                <i class="icon-close"></i> Đóng
+            </a>
+        </button>
+    </div>
 </div>
+
+<style>
+    .float-contact-wrapper {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .toggle-menu {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .toggle-menu:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 14px rgba(0, 0, 0, 0.25);
+    }
+
+    .toggle-menu i {
+        width: 28px;
+        height: 28px;
+        background-image: url('menu-icon.png');
+        background-size: cover;
+    }
+
+    .float-contact {
+        position: absolute;
+        bottom: 70px;
+        right: 0;
+        width: 280px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        background: #fff;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .contact-item:last-child {
+        border-bottom: none;
+    }
+
+    .contact-item:hover {
+        background-color: #f9f9f9;
+    }
+
+    .contact-item a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: #333;
+        font-size: 16px;
+        font-weight: 500;
+        flex-grow: 1;
+    }
+
+    .contact-item i {
+        width: 28px;
+        height: 28px;
+        margin-right: 15px;
+        display: inline-block;
+        background-size: cover;
+    }
+
+    .icon-phone {
+        background-image: url('phone-icon.png');
+    }
+
+    .icon-zalo {
+        background-image: url('zalo-icon.png');
+    }
+
+    .icon-email {
+        background-image: url('email-icon.png');
+    }
+
+    .icon-location {
+        background-image: url('location-icon.png');
+    }
+
+    .icon-close {
+        background-image: url('close-icon.png');
+        width: 22px;
+        height: 22px;
+        margin: auto;
+        cursor: pointer;
+    }
+
+    .close-menu {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        padding: 12px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<script>
+    document.querySelector('.toggle-menu').addEventListener('click', function () {
+        const menu = document.querySelector('.float-contact');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    document.querySelector('.close-menu').addEventListener('click', function () {
+        document.querySelector('.float-contact').style.display = 'none';
+    });
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     window.onload = function () {

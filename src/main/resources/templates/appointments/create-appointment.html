@@ -69,6 +69,61 @@
                                         th:value="${time.id}" th:text="${time.StartTime}"></option>
                             </select>
                         </div>
+                            <label>Chọn khung giờ:</label>
+                            <div class="time-slot" id="timeSlot">
+                                <!-- Các khung giờ sẽ được thêm động bằng JavaScript -->
+                            </div>
+                            <form id="scheduleForm" action="/workHour/add" method="post">
+                                <input type="hidden" name="selectedTime" id="selectedTime">
+                            </form>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const timeSlotContainer = document.getElementById('timeSlot');
+                                const selectedTimeInput = document.getElementById('selectedTime');
+
+                                // Danh sách khung giờ từ 10:00 đến 19:00, cách nhau 30 phút
+                                const timeSlots = [
+                                    "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+                                    "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
+                                    "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
+                                    "19:00","19:30"
+                                ];
+
+                                // Thêm các nút bấm khung giờ vào giao diện
+                                timeSlots.forEach(slot => {
+                                    const button = document.createElement('button');
+                                    button.type = 'button';
+                                    button.dataset.time = slot;
+                                    button.textContent = slot;
+                                    timeSlotContainer.appendChild(button);
+                                });
+
+                                // Xử lý sự kiện chọn khung giờ
+                                timeSlotContainer.addEventListener('click', function (e) {
+                                    if (e.target.tagName === 'BUTTON') {
+                                        // Xóa trạng thái đã chọn từ các nút khác
+                                        const buttons = timeSlotContainer.querySelectorAll('button');
+                                        buttons.forEach(button => button.classList.remove('selected'));
+
+                                        // Thêm trạng thái đã chọn vào nút được click
+                                        e.target.classList.add('selected');
+
+                                        // Gán giá trị khung giờ đã chọn vào input ẩn
+                                        selectedTimeInput.value = e.target.dataset.time;
+                                    }
+                                });
+
+                                // Kiểm tra trước khi gửi form
+                                const scheduleForm = document.getElementById('scheduleForm');
+                                scheduleForm.addEventListener('submit', function (e) {
+                                    if (!selectedTimeInput.value) {
+                                        e.preventDefault(); // Ngăn gửi form nếu chưa chọn khung giờ
+                                        alert('Vui lòng chọn một khung giờ trước khi xác nhận.');
+                                    }
+                                });
+                            });
+                        </script>
                         <div class="form-group">
                             <label for="appointmentNote">Ghi chú</label>
                             <input th:field="*{note}" type="text" id="appointmentNote" class="form-control" required>

@@ -1,16 +1,12 @@
 
 package DoAnChuyenNganh.WebsiteChamSocThuCung.controllers;
 
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Category;
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Product;
-import DoAnChuyenNganh.WebsiteChamSocThuCung.models.WorkHour;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.*;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.DoctorService;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.services.WorkHourService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,6 +44,7 @@ public class DoctorController {
     @GetMapping("/add")
     public String getAddDoctorPage(Model model) {
         model.addAttribute("doctor", new Doctor());
+        model.addAttribute("workhours", workHourService.getAllWorkHour());
         return "doctors/add-doctor";
     }
 
