@@ -48,22 +48,14 @@ public class DoctorController {
     @GetMapping("/add")
     public String getAddDoctorPage(Model model) {
         model.addAttribute("doctor", new Doctor());
-        model.addAttribute("workhours", workHourService.getAllWorkHour());
         return "doctors/add-doctor";
     }
 
     // Xử lý lưu thông tin bác sĩ mới
     @PostMapping("/add")
-    public String createDoctor(@ModelAttribute @Valid Doctor doctor,
-                               @RequestParam List<Long> workTimes) {
-        Set<WorkHour> workHours = workTimes.stream()
-                .map(workHourService::getWorkHourById)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toSet());
-        doctor.setWorkTime(workHours);
-        doctorService.saveDoctor(doctor);
-        return "redirect:/doctors";
+    public String createDoctor(@ModelAttribute @Valid Doctor doctor) {
+        doctorService.saveDoctor(doctor);  // Lưu bác sĩ vào cơ sở dữ liệu
+        return "redirect:/doctors";  // Quay lại danh sách bác sĩ
     }
 
 
@@ -170,7 +162,6 @@ public class DoctorController {
     @PostMapping("/schedule/{id}")
     public String updateSchedule(@PathVariable Long id,
                                  @RequestParam(value = "time", required = false) List<Long> workTimeIds) {
-        System.out.println("Received workTimeIds: " + workTimeIds);  // Kiểm tra giá trị của workTimeIds
 
         Doctor doctor = doctorService.getDoctorById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid doctor id: " + id));
@@ -189,5 +180,6 @@ public class DoctorController {
 
         return "redirect:/doctors";  // Chuyển hướng về danh sách bác sĩ
     }
+
 
 }

@@ -41,9 +41,8 @@ public class Doctor {
     private Set<Appointment> appointments = new HashSet<>();
 
     public void setWorkTime(Set<WorkHour> workHours) {
-
+        this.workTime = workHours;
     }
-
     public void setWorkHours(Set<WorkHour> workHours) {
     }
 

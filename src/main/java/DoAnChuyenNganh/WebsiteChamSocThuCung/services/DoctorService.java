@@ -23,8 +23,8 @@ public class DoctorService {
         return doctorRepository.findById(id);
     }
 
-    public Doctor saveDoctor(Doctor doctor) {
-        return doctorRepository.save(doctor);
+    public void saveDoctor(Doctor doctor) {
+        doctorRepository.save(doctor);
     }
 
 

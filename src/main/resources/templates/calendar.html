@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Vạn Niên</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+        .calendar-container {
+            width: 400px;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .calendar-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        .calendar-header button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .calendar-header button:hover {
+            background: #0056b3;
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .day {
+            text-align: center;
+            line-height: 40px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .day.disabled {
+            background-color: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
+        }
+        .day.holiday {
+            background-color: black;
+            color: white;
+        }
+        .day.selected {
+            background-color: #007bff;
+            color: white;
+        }
+        .day:hover:not(.disabled):not(.holiday) {
+            background-color: #cce5ff;
+        }
+        .time-select {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .time-select select {
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="calendar-container">
+    <div class="calendar-header">
+        <button id="prevMonth">← Tháng trước</button>
+        <h2 id="monthYear"></h2>
+        <button id="nextMonth">Tháng sau →</button>
+    </div>
+    <div class="calendar-days" id="calendarDays"></div>
+
+    <!-- Form chọn giờ -->
+    <div class="time-select">
+        <label for="hour">Chọn giờ:</label>
+        <select id="hour">
+            <option value="00">00</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+        </select>
+        <label for="minute">Phút:</label>
+        <select id="minute">
+            <option value="00">00</option>
+            <option value="15">15</option>
+            <option value="30">30</option>
+            <option value="45">45</option>
+        </select>
+    </div>
+
+    <!-- Hiển thị kết quả -->
+    <div id="selectedDateTime" style="margin-top: 20px; font-size: 16px; text-align: center;"></div>
+</div>
+
+<script>
+    // Hàm tính toán ngày Tết Nguyên Đán (lịch âm)
+    function getLunarNewYear(year) {
+        const lunarNewYear = new Date(year, 0, 25); // Giả định Tết Nguyên Đán vào 25 tháng 1
+        return lunarNewYear;
+    }
+
+    // Tính toán danh sách ngày lễ của Việt Nam cho tất cả các năm
+    const getHolidays = (year) => {
+        const holidays = [
+            `${year}-01-01`, // Tết Dương lịch
+            `${year}-04-30`, // Giải phóng miền Nam
+            `${year}-05-01`, // Quốc tế Lao động
+            `${year}-09-02`, // Quốc khánh
+            formatDate(getLunarNewYear(year)), // Tết Nguyên Đán
+            `${year}-04-18`, // Giỗ tổ Hùng Vương (2024)
+        ];
+        return holidays;
+    };
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    const renderCalendar = (year, month) => {
+        const calendarDays = document.getElementById("calendarDays");
+        calendarDays.innerHTML = "";
+
+        const monthYear = document.getElementById("monthYear");
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+
+        const daysInMonth = lastDay.getDate();
+        monthYear.textContent = `${firstDay.toLocaleString("vi-VN", {
+            month: "long",
+            year: "numeric",
+        })}`;
+
+        const holidays = getHolidays(year);
+
+        for (let i = 0; i < firstDay.getDay(); i++) {
+            calendarDays.innerHTML += `<div class="day disabled"></div>`;
+        }
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const currentDate = new Date(year, month, day);
+            const dateString = formatDate(currentDate);
+            const isHoliday = holidays.includes(dateString);
+            const isSunday = currentDate.getDay() === 0;
+
+            const dayClass = isHoliday ? "holiday" : isSunday ? "disabled" : "";
+            calendarDays.innerHTML += `
+                <div class="day ${dayClass}" data-date="${dateString}">
+                    ${day}
+                </div>
+            `;
+        }
+
+        document.querySelectorAll(".day:not(.disabled):not(.holiday)").forEach(day => {
+            day.addEventListener("click", () => {
+                document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
+                day.classList.add("selected");
+
+                // Lấy dữ liệu ngày đã chọn
+                const selectedDate = day.dataset.date;
+                const selectedHour = document.getElementById("hour").value;
+                const selectedMinute = document.getElementById("minute").value;
+
+                const selectedDateTime = `${selectedDate} ${selectedHour}:${selectedMinute}`;
+                document.getElementById("selectedDateTime").textContent = `Bạn đã chọn: ${selectedDateTime}`;
+            });
+        });
+    };
+
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        }
+        renderCalendar(currentYear, currentMonth);
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        renderCalendar(currentYear, currentMonth);
+    });
+
+    renderCalendar(currentYear, currentMonth);
+</script>
+</body>
+</html>

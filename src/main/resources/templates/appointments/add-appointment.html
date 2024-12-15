@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch Hẹn</title>
+</head>
+<body>
+<h2>Đặt Lịch Hẹn</h2>
+<form action="/appointments/add" method="POST">
+    <div>
+        <label for="appointmentDate">Chọn ngày và giờ:</label>
+        <input type="datetime-local" id="appointmentDate" name="appointmentDate" class="form-control" required>
+    </div>
+    <div>
+        <label for="doctor">Chọn bác sĩ:</label>
+        <select id="doctor" name="doctor.id" class="form-control" required>
+            <option value="">Chọn bác sĩ</option>
+            <!-- Lặp qua danh sách bác sĩ -->
+            <th:block th:each="doctor : ${doctors}">
+                <option th:value="${doctor.id}" th:text="${doctor.name}"></option>
+            </th:block>
+        </select>
+    </div>
+    <div>
+        <label for="petOwnerName">Tên chủ thú cưng:</label>
+        <input type="text" id="petOwnerName" name="petOwnerName" class="form-control" required>
+    </div>
+    <div>
+        <label for="petOwnerPhone">Số điện thoại:</label>
+        <input type="text" id="petOwnerPhone" name="petOwnerPhone" class="form-control" required>
+    </div>
+    <div>
+        <label for="petOwnerEmail">Email:</label>
+        <input type="email" id="petOwnerEmail" name="petOwnerEmail" class="form-control" required>
+    </div>
+    <div>
+        <label for="petConditionNote">Ghi chú tình trạng thú cưng:</label>
+        <textarea id="petConditionNote" name="petConditionNote" class="form-control"></textarea>
+    </div>
+    <button type="submit">Đặt lịch</button>
+</form>
+</body>
+</html>
