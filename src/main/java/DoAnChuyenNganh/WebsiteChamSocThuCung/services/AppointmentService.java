@@ -1,6 +1,7 @@
 package DoAnChuyenNganh.WebsiteChamSocThuCung.services;
 
 import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Appointment;
+import DoAnChuyenNganh.WebsiteChamSocThuCung.models.Doctor;
 import DoAnChuyenNganh.WebsiteChamSocThuCung.repositories.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,7 @@ public class AppointmentService {
         }
         appointmentRepository.deleteById(id);
     }
+
+
     }
 

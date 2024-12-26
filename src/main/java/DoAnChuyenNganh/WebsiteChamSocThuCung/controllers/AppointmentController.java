@@ -18,6 +18,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/appointments")
@@ -139,6 +140,34 @@ public class AppointmentController {
         Appointment appointment = appointmentService.getAppointmentById(id).orElseThrow( () -> new IllegalArgumentException("Invalid doctor Id:" + id));
         model.addAttribute("appointment", appointment);
         return "/appointments/appointment-detail";
+    }
+
+    @GetMapping("/accept/{id}")
+    public String acceptAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid appointment ID: " + id));
+            appointment.setAppointmentState(1); // 1: Accepted
+            appointmentService.updateAppointmentState(appointment);
+            redirectAttributes.addFlashAttribute("successMessage", "Lịch hẹn đã được chấp nhận.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi chấp nhận lịch hẹn.");
+        }
+        return "redirect:/appointments";
+    }
+
+    @GetMapping("/reject/{id}")
+    public String rejectAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            Appointment appointment = appointmentService.getAppointmentById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid appointment ID: " + id));
+            appointment.setAppointmentState(2); // 2: Rejected
+            appointmentService.updateAppointmentState(appointment);
+            redirectAttributes.addFlashAttribute("successMessage", "Lịch hẹn đã bị từ chối.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi từ chối lịch hẹn.");
+        }
+        return "redirect:/appointments";
     }
 
 }

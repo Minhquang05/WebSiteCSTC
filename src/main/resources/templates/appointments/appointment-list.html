@@ -34,12 +34,26 @@
                 <td style="font-size: 1em;" th:text="${appointment.id}"></td>
                 <td style="font-size: 1em;" th:text="${appointment.customerName}"></td>
                 <td style="font-size: 1em;" th:text="${appointment.appointmentDate}"></td>
-                <td style="font-size: 1em;" th:text="${appointment.appointmentState}"></td>
+                <td style="font-size: 1em;">
+                    <span th:if="${appointment.appointmentState == 0}" class="badge bg-warning">Đang chờ</span>
+                    <span th:if="${appointment.appointmentState == 1}" class="badge bg-success">Đã chấp nhận</span>
+                    <span th:if="${appointment.appointmentState == 2}" class="badge bg-danger">Đã từ chối</span>
+                </td>
+
                 <td>
+                    <a sec:authorize="hasAnyAuthority('ADMIN', 'DOCTOR')" style="width:100px; height:30px;"
+                       th:href="@{/appointments/accept/{id}(id=${appointment.id})}"
+                       class="btn btn-success btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn chấp nhận lịch hẹn này?')">Chấp nhận
+                    </a>
+                    <a sec:authorize="hasAnyAuthority('ADMIN','DOCTOR')" style="width:100px; height:30px;"
+                       th:href="@{/appointments/reject/{id}(id=${appointment.id})}"
+                       class="btn btn-secondary btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn từ chối lịch hẹn này?')">Từ chối
+                    </a>
                     <a style="width:100px; height:30px;"
                        th:href="@{/appointments/detail/{id}(id=${appointment.id})}"
-                       class="btn btn-info btn-sm">
-                        Chi tiết
+                       class="btn btn-info btn-sm">Chi tiết
                     </a>
                     <a style="width:100px ; height:30px" th:href="@{/appointments/delete/{id}(id=${appointment.id})}" class="btn btn-danger btn-sm"onclick="return confirm('Are you sure?')">Hủy</a>
 

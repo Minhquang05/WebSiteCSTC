@@ -71,10 +71,7 @@ public class DoctorController {
     // Xử lý cập nhật thông tin bác sĩ
     @PostMapping("/edit/{id}")
     public String updateDoctor(@PathVariable Long id,
-                               @ModelAttribute Doctor updatedDoctor,
-                               @RequestParam("avatar") File avatar,
-                               @RequestParam List<Long> workTimes) {
-        Stream<Long> workHours = workTimes.stream();
+                               @ModelAttribute Doctor updatedDoctor) {
         Optional<Doctor> existingDoctor = doctorService.getDoctorById(id);
         if (existingDoctor.isPresent()) {
             Doctor doctor = existingDoctor.get();
@@ -82,19 +79,6 @@ public class DoctorController {
             doctor.setSpecialization(updatedDoctor.getSpecialization());
             doctor.setPhone(updatedDoctor.getPhone());
             doctor.setEmail(updatedDoctor.getEmail());
-
-            // Kiểm tra nếu có ảnh mới, tải lên và lưu vào thư mục
-            if (avatar!=null) {
-                try {
-                    // Lưu ảnh vào thư mục tĩnh
-//                    String avatarFilename = avatar.getOriginalFilename();
-//                    File file = new File("src/main/resources/static/images/" + avatarFilename);
-//                    avatar.transferTo(file);  // Lưu ảnh vào thư mục
-                    doctor.setAvatar(avatar.getPath());  // Cập nhật avatar vào đối tượng bác sĩ
-                } catch (Exception e) {
-                    e.printStackTrace();  // Nếu có lỗi trong việc tải ảnh
-                }
-            }
             doctorService.saveDoctor(doctor);  // Lưu bác sĩ vào cơ sở dữ liệu
         }
         return "redirect:/doctors";  // Sau khi cập nhật xong, chuyển về trang danh sách bác sĩ

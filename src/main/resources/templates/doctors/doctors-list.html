@@ -38,7 +38,8 @@
                 <td>
                     <a sec:authorize="hasAnyAuthority('DOCTOR')"
                        th:href="@{/doctors/schedule/{id}(id=${doctor.id})}"
-                       class="btn btn-warning btn-sm">Sửa Giờ Làm Việc</a>
+                       class="btn btn-secondary btn-sm">Sửa Giờ Làm Việc</a>
+
                     <a th:href="@{/doctors/detail/{id}(id=${doctor.id})}"
                        class="btn btn-warning btn-sm">Chi tiết</a>
                     <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}"
