@@ -86,4 +86,16 @@ public class User implements UserDetails{
     public int hashCode() {
         return getClass().hashCode();
     }
+
+
+    private int isRemoved;  // Thêm trường này vào class nếu chưa có
+
+    public void setIsRemoved(int status) {
+        this.isRemoved = status;  // Gán giá trị status cho trường isRemoved
+    }
+
+    // Thêm getter nếu chưa có
+    public int getIsRemoved() {
+        return this.isRemoved;
+    }
 }

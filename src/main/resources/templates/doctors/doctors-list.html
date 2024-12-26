@@ -1,7 +1,7 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       layout:decorate="~{layout}">
 <head>
     <link rel="stylesheet"
@@ -19,9 +19,9 @@
             <tr>
                 <th>Mã bác sĩ</th>
                 <th>Tên bác sĩ</th>
-                <th>Ảnh</th>
                 <th>Số Điện Thoại</th>
                 <th>Email</th>
+                <th>Trạng thái</th>
                 <th>Chức năng</th>
             </tr>
             </thead>
@@ -29,17 +29,30 @@
             <tr th:each="doctor : ${doctors}">
                 <td th:text="${doctor.id}"></td>
                 <td th:text="${doctor.name}"></td>
-                <td th:text="${doctor.avatar}"></td>
                 <td th:text="${doctor.phone}"></td>
                 <td th:text="${doctor.email}"></td>
                 <td>
+                    <span th:if="${doctor.isRemoved == 0}" class="badge bg-success">Hoạt động</span>
+                    <span th:if="${doctor.isRemoved == 1}" class="badge bg-danger">Đã khóa</span>
+                </td>
+                <td>
                     <a sec:authorize="hasAnyAuthority('DOCTOR')"
-                         th:href="@{/doctors/schedule/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">Sửa Giờ Làm Việc</a>
-                    <a th:href="@{/doctors/detail/{id}(id=${doctor.id})}" class="btn btn-warning btn-sm">Chi tiết</a>
-                    <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}" class="btn btn-success btn-sm">Chỉnh Sửa</a>
-                    <a th:href="@{/doctors/delete/{id}(id=${doctor.id})}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</a>
+                       th:href="@{/doctors/schedule/{id}(id=${doctor.id})}"
+                       class="btn btn-warning btn-sm">Sửa Giờ Làm Việc</a>
+                    <a th:href="@{/doctors/detail/{id}(id=${doctor.id})}"
+                       class="btn btn-warning btn-sm">Chi tiết</a>
+                    <a th:href="@{/doctors/edit/{id}(id=${doctor.id})}"
+                       class="btn btn-success btn-sm">Chỉnh Sửa</a>
 
+                    <a th:if="${doctor.isRemoved == 0}"
+                       th:href="@{/doctors/block/{id}(id=${doctor.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn khóa bác sĩ này không?')">Khóa</a>
+
+                    <a th:if="${doctor.isRemoved == 1}"
+                       th:href="@{/doctors/unblock/{id}(id=${doctor.id})}"
+                       class="btn btn-success btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn mở khóa bác sĩ này không?')">Mở khóa</a>
                 </td>
             </tr>
             </tbody>
@@ -47,7 +60,4 @@
     </div>
 </section>
 </body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>

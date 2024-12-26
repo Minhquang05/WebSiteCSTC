@@ -50,12 +50,28 @@ public class EmployeeController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable(value = "id") long id, Model model) {
-        User employee = userService.getUserById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-        model.addAttribute("user", employee);
-        return "/employees/update-employee";
+        try {
+            // Tìm kiếm nhân viên theo id
+            User employee = userService.getUserById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhân viên với Id: " + id));
+
+            // Nếu tìm thấy, thêm thông tin nhân viên vào model
+            model.addAttribute("user", employee);
+
+            // Trả về trang cập nhật thông tin
+            return "employees/update-employee";
+        } catch (IllegalArgumentException e) {
+            // Ghi log lỗi hoặc thông báo
+            System.err.println(e.getMessage());
+
+            // Chuyển hướng về trang danh sách nhân viên với thông báo lỗi
+            model.addAttribute("errorMessage", "Nhân viên với ID " + id + " không tồn tại.");
+            return "redirect:/employees";
+        }
     }
 
-//    @PostMapping("/update/{id}")
+
+    //    @PostMapping("/update/{id}")
 //    public String update(@PathVariable Long id,@Valid User user,BindingResult bindingResult,Model model){
 //        var errors = bindingResult.getFieldError("phone");
 //        List<String> check = new ArrayList<String>();
@@ -71,27 +87,39 @@ public class EmployeeController {
 //        userService.updateEmployee(user);
 //        return "redirect:/employees";
 //    }
-@PostMapping("/update/{id}")
-public String updateEmployee(@PathVariable Long id, @Valid User user, BindingResult bindingResult, Model model) {
-    if (bindingResult.hasErrors()) {
-        List<String> errors = bindingResult.getAllErrors()
-                .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .toList();
-        model.addAttribute("errors", errors);
-        model.addAttribute("user", user);
-        return "employees/update-employee";
+    @PostMapping("/update/{id}")
+    public String updateEmployee(@PathVariable Long id, @Valid User user, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+            model.addAttribute("errors", errors);
+            model.addAttribute("user", user);
+            return "employees/update-employee";
+        }
+
+        userService.save(user);
+        userService.setEmployeeRole(user.getUsername());
+        return "redirect:/employees";
     }
 
-    userService.save(user);
-    userService.setEmployeeRole(user.getUsername());
-    return "redirect:/employees";
-}
-
     // Delete employee
-    @GetMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable Long id) {
-        userService.delete(id);
+//    @GetMapping("/delete/{id}")
+//    public String deleteEmployee(@PathVariable Long id) {
+//        userService.delete(id);
+//        return "redirect:/employees";
+//    }
+
+    @GetMapping("/block/{id}")
+    public String blockEmployee(@PathVariable Long id) {
+        userService.updateUserStatus(id, 1); // 1 = blocked
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/unblock/{id}")
+    public String unblockEmployee(@PathVariable Long id) {
+        userService.updateUserStatus(id, 0); // 0 = active
         return "redirect:/employees";
     }
 

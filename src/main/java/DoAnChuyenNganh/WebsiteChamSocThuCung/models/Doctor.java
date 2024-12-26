@@ -48,5 +48,16 @@ public class Doctor {
     public void setWorkTime(List<Long> workTimes) {
     }
 
+    private int isRemoved;  // Thêm trường này vào class nếu chưa có
+
+    public void setIsRemoved(int status) {
+        this.isRemoved = status;  // Gán giá trị status cho trường isRemoved
+    }
+
+    // Thêm getter nếu chưa có
+    public int getIsRemoved() {
+        return this.isRemoved;
+    }
+
     // Getters and Setters
 }

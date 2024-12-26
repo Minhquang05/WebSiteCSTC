@@ -61,11 +61,29 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @GetMapping("/categories/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Long id, Model model) {
+//    @GetMapping("/categories/delete/{id}")
+//    public String deleteCategory(@PathVariable("id") Long id, Model model) {
+//        Category category = categoryService.getCategoryById(id)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
+//        categoryService.deleteCategoryById(id);
+//        model.addAttribute("categories", categoryService.getAllCategories());
+//        return "redirect:/categories";
+//    }
+
+    @GetMapping("/categories/block/{id}")
+    public String blockCategory(@PathVariable("id") Long id, Model model) {
         Category category = categoryService.getCategoryById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
-        categoryService.deleteCategoryById(id);
+        categoryService.updateCategoryStatus(id, 1); // 1 for blocked
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "redirect:/categories";
+    }
+
+    @GetMapping("/categories/unblock/{id}")
+    public String unblockCategory(@PathVariable("id") Long id, Model model) {
+        Category category = categoryService.getCategoryById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
+        categoryService.updateCategoryStatus(id, 0); // 0 for active
         model.addAttribute("categories", categoryService.getAllCategories());
         return "redirect:/categories";
     }

@@ -38,5 +38,10 @@ public class DoctorService {
     public List<Doctor> findAllDoctors() {
         return doctorRepository.findAll();
     }
-
+    public void updateDoctorStatus(Long id, int status) {
+        Doctor doctor = getDoctorById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid doctor Id:" + id));
+        doctor.setIsRemoved(status);
+        doctorRepository.save(doctor);
+    }
 }

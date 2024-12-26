@@ -50,13 +50,11 @@ public class ProductController {
         return "/products/products-list";
     }
 
-
     @GetMapping("/sorted/asc")
     public String showProductsSortedByPriceAsc(Model model) {
         model.addAttribute("products", productService.getAllProductsSortedByPriceAsc());
         return "/products/products-list";
     }
-
 
     @GetMapping("/sorted/desc")
     public String showProductsSortedByPriceDesc(Model model) {
@@ -148,9 +146,15 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable Long id) {
-        productService.updateProductStatus(id);
+    @GetMapping("/lock/{id}")
+    public String lockProduct(@PathVariable Long id) {
+        productService.updateProductStatus(id, Product.PRODUCT_LOCKED); // or whatever constant you define
+        return "redirect:/products";
+    }
+
+    @GetMapping("/unlock/{id}")
+    public String unlockProduct(@PathVariable Long id) {
+        productService.updateProductStatus(id, Product.PRODUCT_ACTIVE); // or whatever constant you define
         return "redirect:/products";
     }
 

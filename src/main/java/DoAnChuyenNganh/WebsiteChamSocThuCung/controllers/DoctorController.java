@@ -104,12 +104,32 @@ public class DoctorController {
 
 
     // Hiển thị trang xác nhận xóa bác sĩ
-    @GetMapping("/delete/{id}")
-    public String getDeleteDoctorPage(@PathVariable Long id, Model model) {
+//    @GetMapping("/delete/{id}")
+//    public String getDeleteDoctorPage(@PathVariable Long id, Model model) {
+//        Optional<Doctor> doctor = doctorService.getDoctorById(id);
+//        if (doctor.isPresent()) {
+//            doctorService.deleteDoctor(id);
+//            return "redirect:/doctors"; // Trang xác nhận xóa
+//        }
+//        return "redirect:/doctors";
+//    }
+
+    @GetMapping("/block/{id}")
+    public String blockDoctor(@PathVariable Long id, Model model) {
         Optional<Doctor> doctor = doctorService.getDoctorById(id);
         if (doctor.isPresent()) {
-            doctorService.deleteDoctor(id);
-            return "redirect:/doctors"; // Trang xác nhận xóa
+            doctorService.updateDoctorStatus(id, 1); // 1 for blocked
+            return "redirect:/doctors";
+        }
+        return "redirect:/doctors";
+    }
+
+    @GetMapping("/unblock/{id}")
+    public String unblockDoctor(@PathVariable Long id, Model model) {
+        Optional<Doctor> doctor = doctorService.getDoctorById(id);
+        if (doctor.isPresent()) {
+            doctorService.updateDoctorStatus(id, 0); // 0 for active
+            return "redirect:/doctors";
         }
         return "redirect:/doctors";
     }

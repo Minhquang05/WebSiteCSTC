@@ -133,4 +133,11 @@ public class UserService implements UserDetailsService{
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    public void updateUserStatus(Long id, int status) {
+        User user = getUserById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        user.setIsRemoved(status);
+        userRepository.save(user);
+    }
 }

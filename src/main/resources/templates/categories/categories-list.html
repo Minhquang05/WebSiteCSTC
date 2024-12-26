@@ -12,27 +12,41 @@
     <div class="container">
         <h2 class="mt-4 mb-4">DANH MỤC SẢN PHẨM</h2>
         <a th:href="@{/categories/add}" class="btn btn-primary mb-3">Thêm danh mục mới</a>
-         <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-hover">
             <thead class="table-dark">
-                <tr>
-                    <th>Mã mục sản phẩm</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Chức năng</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="category : ${categories}">
-                    <td th:text="${category.id}"></td>
-                    <td th:text="${category.name}"></td>
-                    <td>
-                        <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
-                        <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Xóa</a>
-                    </td>
-                </tr>
-                </tbody>
+            <tr>
+                <th>Mã mục sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Trạng thái</th>
+                <th>Chức năng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${categories}">
+                <td th:text="${category.id}"></td>
+                <td th:text="${category.name}"></td>
+                <td>
+                    <span th:if="${category.isRemoved == 0}" class="badge bg-success">Hoạt động</span>
+                    <span th:if="${category.isRemoved == 1}" class="badge bg-danger">Đã khóa</span>
+                </td>
+                <td>
+                    <a th:href="@{/categories/edit/{id}(id=${category.id})}"
+                       class="btn btn-success btn-sm">Chỉnh sửa</a>
+
+                    <a th:if="${category.isRemoved == 0}"
+                       th:href="@{/categories/block/{id}(id=${category.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn khóa danh mục này không?')">Khóa</a>
+
+                    <a th:if="${category.isRemoved == 1}"
+                       th:href="@{/categories/unblock/{id}(id=${category.id})}"
+                       class="btn btn-success btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn mở khóa danh mục này không?')">Mở khóa</a>
+                </td>
+            </tr>
+            </tbody>
         </table>
     </div>
-
 </section>
 </body>
 </html>

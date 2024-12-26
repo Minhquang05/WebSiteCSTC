@@ -13,6 +13,8 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product {
+    public static int PRODUCT_LOCKED;
+    public static int PRODUCT_ACTIVE;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")

@@ -61,7 +61,17 @@
                 <td sec:authorize="hasAuthority('ADMIN')">
                     <div>
                         <a style="width:100px ; height:30px" th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
-                        <a style="width:100px ; height:30px" th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm"onclick="return confirm('Are you sure?')">Xóa</a>
+                        <a th:href="@{/products/block/{id}(id=${product.id})}"
+                           class="btn btn-warning"
+                           th:text="${product.isRemoved == 0 ? 'Block' : 'Unblock'}">
+                        </a>
+                    </div>
+                    <div>
+                        <a th:if="${product.isRemoved == 1}"
+                           th:href="@{/products/unlock/{id}(id=${product.id})}"
+                           class="btn btn-success">
+                            Unlock
+                        </a>
                     </div>
                 </td>
                 <td>

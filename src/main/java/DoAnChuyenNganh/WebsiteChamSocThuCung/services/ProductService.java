@@ -77,6 +77,16 @@ public class ProductService {
         return dogProducts;
     }
 
+    public static final int PRODUCT_ACTIVE = 0;
+    public static final int PRODUCT_LOCKED = 1;
+
+    public void updateProductStatus(Long id, int status) {
+        Product product = getProductById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+        product.setIsRemoved((byte) status);
+        productRepository.save(product);
+    }
+
     public List<Product> getAllProductsSortedByPriceAsc() {
         return productRepository.findAllByOrderByPriceAsc();
     }

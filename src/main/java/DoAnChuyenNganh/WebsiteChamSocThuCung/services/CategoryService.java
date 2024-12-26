@@ -39,4 +39,10 @@ public class CategoryService {
         }
         categoryRepository.deleteById(id);
     }
+    public void updateCategoryStatus(Long id, int status) {
+        Category category = getCategoryById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id:" + id));
+        category.setIsRemoved(status);
+        categoryRepository.save(category);
+    }
 }

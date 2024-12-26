@@ -20,6 +20,7 @@
                 <th>Tên nhân viên</th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
+                <th>Trạng thái</th>
                 <th>Chức năng</th>
             </tr>
             </thead>
@@ -30,18 +31,28 @@
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.phone}"></td>
                 <td>
-                    <a th:href="@{/employees/edit/{id}(id=${employee.id})}" class="btn btn-success btn-sm">Chỉnh sửa</a>
-                    <a th:href="@{/employees/delete/{id}(id=${employee.id})}" class="btn btn-danger btn-sm"
-                       onclick="return confirm('Are you sure?')">Xóa</a>
+                    <span th:if="${employee.isRemoved == 0}" class="badge bg-success">Hoạt động</span>
+                    <span th:if="${employee.isRemoved == 1}" class="badge bg-danger">Đã khóa</span>
+                </td>
+                <td>
+                    <a th:href="@{/employees/edit/{id}(id=${employee.id})}"
+                       class="btn btn-success btn-sm">Chỉnh sửa</a>
+
+                    <!-- Nút khóa/mở khóa -->
+                    <a th:if="${employee.isRemoved == 0}"
+                       th:href="@{/employees/block/{id}(id=${employee.id})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn khóa nhân viên này không?')">Khóa</a>
+
+                    <a th:if="${employee.isRemoved == 1}"
+                       th:href="@{/employees/unblock/{id}(id=${employee.id})}"
+                       class="btn btn-success btn-sm"
+                       onclick="return confirm('Bạn có chắc chắn muốn mở khóa nhân viên này không?')">Mở khóa</a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
-
 </section>
 </body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>

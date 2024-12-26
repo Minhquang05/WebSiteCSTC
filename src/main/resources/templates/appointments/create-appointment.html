@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -22,6 +21,21 @@
 <body>
 
 <div class="container">
+    <!-- Thông báo thành công -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${successMessage}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <!-- Thông báo lỗi -->
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <h2>Đặt Lịch Khám Thú Y</h2>
     <button type="button" class="btn btn-info" onclick="window.location.href='/appointments'">Quay lại</button>
     <div id="calendar"></div>
@@ -64,77 +78,21 @@
                         </div>
                         <label>Chọn Khung giờ</label>
                         <div th:each="doctor : ${doctors}" class="form-group">
-                            <select  class="form-control" th:id="${doctor.id}" name="availableTime" disabled="true" hidden="true">
-                                <option th:each=" time : ${doctor.workTime}"
+                            <select class="form-control" th:id="${doctor.id}" name="availableTime" disabled="true" hidden="true">
+                                <option th:each="time : ${doctor.workTime}"
                                         th:value="${time.id}" th:text="${time.StartTime}"></option>
                             </select>
                         </div>
-                            <label>Chọn khung giờ:</label>
-                            <div class="time-slot" id="timeSlot">
-                                <!-- Các khung giờ sẽ được thêm động bằng JavaScript -->
-                            </div>
-                            <form id="scheduleForm" action="/workHour/add" method="post">
-                                <input type="hidden" name="selectedTime" id="selectedTime">
-                            </form>
-
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                const timeSlotContainer = document.getElementById('timeSlot');
-                                const selectedTimeInput = document.getElementById('selectedTime');
-
-                                // Danh sách khung giờ từ 10:00 đến 19:00, cách nhau 30 phút
-                                const timeSlots = [
-                                    "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
-                                    "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
-                                    "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
-                                    "19:00","19:30"
-                                ];
-
-                                // Thêm các nút bấm khung giờ vào giao diện
-                                timeSlots.forEach(slot => {
-                                    const button = document.createElement('button');
-                                    button.type = 'button';
-                                    button.dataset.time = slot;
-                                    button.textContent = slot;
-                                    timeSlotContainer.appendChild(button);
-                                });
-
-                                // Xử lý sự kiện chọn khung giờ
-                                timeSlotContainer.addEventListener('click', function (e) {
-                                    if (e.target.tagName === 'BUTTON') {
-                                        // Xóa trạng thái đã chọn từ các nút khác
-                                        const buttons = timeSlotContainer.querySelectorAll('button');
-                                        buttons.forEach(button => button.classList.remove('selected'));
-
-                                        // Thêm trạng thái đã chọn vào nút được click
-                                        e.target.classList.add('selected');
-
-                                        // Gán giá trị khung giờ đã chọn vào input ẩn
-                                        selectedTimeInput.value = e.target.dataset.time;
-                                    }
-                                });
-
-                                // Kiểm tra trước khi gửi form
-                                const scheduleForm = document.getElementById('scheduleForm');
-                                scheduleForm.addEventListener('submit', function (e) {
-                                    if (!selectedTimeInput.value) {
-                                        e.preventDefault(); // Ngăn gửi form nếu chưa chọn khung giờ
-                                        alert('Vui lòng chọn một khung giờ trước khi xác nhận.');
-                                    }
-                                });
-                            });
-                        </script>
                         <div class="form-group">
                             <label for="appointmentNote">Ghi chú</label>
                             <input th:field="*{note}" type="text" id="appointmentNote" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary" >Đặt Lịch</button>
+                            <button type="submit" class="btn btn-primary">Đặt Lịch</button>
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -166,23 +124,32 @@
             locale: 'vi',  // Thiết lập ngôn ngữ là tiếng Việt
             selectable: true, // Cho phép người dùng chọn ngày
             events: [],  // Sự kiện sẽ được tải từ backend
+            validRange: {
+                start: new Date() // Vô hiệu hóa các ngày trong quá khứ
+            },
             dateClick: function(info) {
-                // Khi người dùng click vào một ngày, hiển thị form đặt lịch
                 var selectedDate = info.dateStr;
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+                var selectedDateTime = new Date(selectedDate);
+
+                // Kiểm tra nếu ngày được chọn là ngày trong quá khứ
+                if (selectedDateTime < today) {
+                    alert("Không thể chọn ngày trong quá khứ!");
+                    return;
+                }
+
                 if (isSunday(selectedDate) || isHoliday(selectedDate)) {
                     alert("Xin lỗi! bạn hãy chọn ngày khác vì ngày này cửa hàng đóng cửa!");
                 } else {
                     document.getElementById('apntDate').value = selectedDate;
-                     let selector = document.getElementById('doctor');
+                    let selector = document.getElementById('doctor');
                     let value = selector[selector.selectedIndex].value;
-                    for (let i = 0; i < selector.length; i++)
-                     {
-                        if (selector[i].value == value)
-                        {
+                    for (let i = 0; i < selector.length; i++) {
+                        if (selector[i].value == value) {
                             document.getElementById(selector[i].value).disabled = false;
                             document.getElementById(selector[i].value).hidden = false;
-                        }
-                        else{
+                        } else {
                             document.getElementById(selector[i].value).disabled = true;
                             document.getElementById(selector[i].value).hidden = true;
                         }
@@ -207,28 +174,22 @@
             const dayMonth = date.slice(5);  // Lấy phần ngày-tháng (MM-DD)
             return holidays.includes(dayMonth);  // Kiểm tra xem ngày-tháng có trong danh sách lễ không
         }
-
     });
 
-    document.getElementById("doctor").onchange = function()
-     {
+    document.getElementById("doctor").onchange = function() {
         let selector = document.getElementById('doctor');
         let value = selector[selector.selectedIndex].value;
-        for (let i = 0; i < selector.length; i++)
-         {
-            if (selector[i].value == value)
-            {
+        for (let i = 0; i < selector.length; i++) {
+            if (selector[i].value == value) {
                 document.getElementById(selector[i].value).disabled = false;
                 document.getElementById(selector[i].value).hidden = false;
-            }
-            else{
+            } else {
                 document.getElementById(selector[i].value).disabled = true;
                 document.getElementById(selector[i].value).hidden = true;
             }
         }
     }
 </script>
-
 
 </body>
 </html>
